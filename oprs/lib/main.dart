@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'user.dart' as ud;
 
 void main() {
   runApp(const MyApp());
@@ -21,6 +22,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
@@ -34,7 +37,15 @@ class _MyHomePageState extends State<MyHomePage> {
   final password = TextEditingController();
 
   void login(){
-
+    for(int i=0;i<ud.users.length;i++)
+    {
+      if(ud.users[i].username!=username.text)
+      print('Username Mismatch');
+      else if(ud.users[i].password!=password.text)
+      print('Password Mismatch');
+      else
+      print('Match');
+    }
   }
 
   @override
@@ -47,7 +58,15 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[SizedBox(
+          children: <Widget>[
+            const Text(
+              style: TextStyle(fontSize: 30, color: Color.fromARGB(255, 98, 98, 98)),
+              'Welcome to OPRS'
+            ),
+            const SizedBox(
+                height: 50,
+            ),
+            SizedBox(
             width: 1000.0,
             child: TextFormField(
               decoration: const InputDecoration(
@@ -81,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.all(16.0),
                     textStyle: const TextStyle(fontSize: 20),
                   ),
-                  onPressed: () {},
+                  onPressed: login,
                   child: const Text('Login'),
                 ),
                 const SizedBox(
