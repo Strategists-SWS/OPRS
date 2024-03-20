@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           const SizedBox(
-            height: 10
+            height: 40
           ),
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.all(16.0),
                     textStyle: const TextStyle(fontSize: 20),
                   ),
-                  onPressed: () {},
+                  onPressed: () {username.text='';password.text='';},
                   child: const Text('Reset'),
                 ),
               ],
