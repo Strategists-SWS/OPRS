@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oprs/public.dart';
+import 'package:oprs/reviewer.dart';
 
 void main() => runApp(const MyApp());
 
@@ -30,6 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _tabs = [
     const HomeScreen(),
     const Review(),
+    const ReviewPage(),
     const LoginScreen(title: 'Login'),
   ];
 
@@ -44,7 +46,8 @@ class _MyHomePageState extends State<MyHomePage> {
           bottom: const TabBar(
             tabs: [
               Tab(icon: Icon(Icons.home), text: 'Home'),
-              Tab(icon: Icon(Icons.favorite), text: 'Reviewed Papers'),
+              Tab(icon: Icon(Icons.favorite), text: 'Submitted Papers'),
+              Tab(icon: Icon(Icons.book), text: 'Reviewed Papers'),
               Tab(icon: Icon(Icons.person), text: 'Login/Signup'),
             ],
           ),
