@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:oprs/reviewpaperform.dart';
 
 // Define a class for research papers
 class ReviewPaper {
@@ -20,8 +19,8 @@ List<ReviewPaper> researchPapers = [
   // Add more sample data as needed
 ];
 
-class ReviewPage extends StatelessWidget {
-  const ReviewPage({super.key});
+class ReviewForm extends StatelessWidget {
+  const ReviewForm({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,34 +29,40 @@ class ReviewPage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ReviewPaperPage(),
+      home: const ReviewFormPage(),
     );
   }
 }
 
-class ReviewPaperPage extends StatelessWidget {
-  const ReviewPaperPage({super.key});
+class ReviewFormPage extends StatelessWidget {
+  const ReviewFormPage({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Review Papers'),
       ),
-      body: ListView.builder(
-        itemCount: researchPapers.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(researchPapers[index].title),
-            subtitle: Text(researchPapers[index].author),
-            trailing: TextButton(
-              child: Text('Score: ${researchPapers[index].score.toString()}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
+      body: Column(
+          children: [
+            SizedBox(
+              width: 100.0,
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                    border: UnderlineInputBorder(), labelText: 'Novelty'),
               ),
-              onPressed: () {}
             ),
-          );
-        },
-      ),
+            SizedBox(
+              width: 100.0,
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                    border: UnderlineInputBorder(), labelText: 'Correctness'),
+              ),
+            ),
+          ],
+      )
     );
   }
 }
