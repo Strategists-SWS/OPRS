@@ -21,11 +21,20 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for android - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -44,38 +53,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD2DjKi-vQ81d8V08XUA9tivQno6n00wr4',
-    appId: '1:640025952063:web:fbcf08a3923c06c7505d8a',
-    messagingSenderId: '640025952063',
-    projectId: 'oprs-349a6',
-    authDomain: 'oprs-349a6.firebaseapp.com',
-    storageBucket: 'oprs-349a6.appspot.com',
-    measurementId: 'G-WT7GT1ZR1L',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCS6_8DaycZs85FJgLyBVfHg0krTT-EJf4',
-    appId: '1:640025952063:android:53285a22e719380d505d8a',
-    messagingSenderId: '640025952063',
-    projectId: 'oprs-349a6',
-    storageBucket: 'oprs-349a6.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCIpiOqGKRX3sDhScoKgXadv0UpxokwyBA',
-    appId: '1:640025952063:ios:398039b25970b4a7505d8a',
-    messagingSenderId: '640025952063',
-    projectId: 'oprs-349a6',
-    storageBucket: 'oprs-349a6.appspot.com',
-    iosBundleId: 'com.example.oprs',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCIpiOqGKRX3sDhScoKgXadv0UpxokwyBA',
-    appId: '1:640025952063:ios:96948f408649b1de505d8a',
-    messagingSenderId: '640025952063',
-    projectId: 'oprs-349a6',
-    storageBucket: 'oprs-349a6.appspot.com',
-    iosBundleId: 'com.example.oprs.RunnerTests',
+    apiKey: 'AIzaSyDMZVobH3DMmqpeBRKBi2TIB4nooBOOqmA',
+    appId: '1:369435031918:web:32a7bec5d127da38d1297f',
+    messagingSenderId: '369435031918',
+    projectId: 'oprs-6e071',
+    authDomain: 'oprs-6e071.firebaseapp.com',
+    storageBucket: 'oprs-6e071.appspot.com',
   );
 }
