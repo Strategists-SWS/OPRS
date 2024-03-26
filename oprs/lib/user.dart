@@ -4,4 +4,7 @@ class Userdata{
   final String password;
 }
 
+bool loggedIn=false;
+String loginUsername='';
+
 var users=[Userdata('Dragmon', 'CrackJee@22')];
