@@ -5,3 +5,5 @@ class Userdata {
 }
 
 var users = [const Userdata('Dragmon', 'CrackJee@22')];
+bool loggedIn = false;
+String loginUsername = '';
