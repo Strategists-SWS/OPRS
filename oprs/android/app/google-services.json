@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "640025952063",
+    "project_id": "oprs-349a6",
+    "storage_bucket": "oprs-349a6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640025952063:android:53285a22e719380d505d8a",
+        "android_client_info": {
+          "package_name": "com.example.oprs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCS6_8DaycZs85FJgLyBVfHg0krTT-EJf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
