@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:oprs/homepage.dart';
 import 'package:oprs/landing.dart';
 
 class MyLoginPage extends StatelessWidget {
@@ -32,17 +33,17 @@ class MyLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
-        title: 'OPRS',
-        onLogin: tryLogin,
-        onSignup: trySignUp,
-        onSubmitAnimationCompleted: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => const HomePage(),
-            ));
-          },
-          onRecoverPassword: (_) async {
-            return null;
-          },
-        );
+      title: 'OPRS',
+      onLogin: tryLogin,
+      onSignup: trySignUp,
+      onSubmitAnimationCompleted: () {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => const MyHomePage(),
+        ));
+      },
+      onRecoverPassword: (_) async {
+        return null;
+      },
+    );
   }
 }

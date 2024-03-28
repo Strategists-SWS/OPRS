@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 class UploadPaperPage extends StatelessWidget {
+  const UploadPaperPage({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -11,15 +12,16 @@ class UploadPaperPage extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Upload Paper'),
+          title: const Text('Upload Paper'),
         ),
-        body: UploadPaperForm(),
+        body: const UploadPaperForm(),
       ),
     );
   }
 }
 
 class UploadPaperForm extends StatefulWidget {
+  const UploadPaperForm({super.key});
   @override
   _UploadPaperFormState createState() => _UploadPaperFormState();
 }
