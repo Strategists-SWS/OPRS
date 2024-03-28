@@ -39,38 +39,42 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
     }
   }
 
-  void _submitPaper(BuildContext context) {
-    String title = _titleController.text;
-    String topics = _topicsController.text;
-    if (_pickedFile != null) {
-      print('Title: $title');
-      print('Related Topics: $topics');
-      print('File Name: ${_pickedFile!.name}');
-      print('File Size: ${_pickedFile!.size} bytes');
+void _submitPaper(BuildContext context) {
+  String title = _titleController.text;
+  String topics = _topicsController.text;
+  if (_pickedFile != null) {
+    print('Title: $title');
+    print('Related Topics: $topics');
+    print('File Name: ${_pickedFile!.name}');
+    print('File Size: ${_pickedFile!.size} bytes');
 
-      // Show success message and return to the Review widget
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Success"),
-            content: Text("The paper has been submitted successfully."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close the dialog
-                  Navigator.pop(context); // Return to the Review widget
-                },
-                child: Text("Close"),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      print('Please select a PDF file.');
-    }
+    // Show success message
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Success"),
+          content: Text("The paper has been submitted successfully."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                Navigator.pop(context); // Close the UploadPaperPage
+                Navigator.popAndPushNamed(context, '/'); // Navigate back to the ResearchPaperPage
+              },
+              child: Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
+  } else {
+    print('Please select a PDF file.');
   }
+}
+
+
+
 
   @override
   Widget build(BuildContext context) {
