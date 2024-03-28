@@ -59,7 +59,7 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context); // Close the dialog
-                  Navigator.pop(context); // Return to the Review widget
+                  
                 },
                 child: Text("Close"),
               ),
@@ -96,7 +96,13 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
           ),
           SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () => _submitPaper(context),
+            onPressed: () {
+          // Handle add new paper action
+          _submitPaper(context);
+           Navigator.pop(
+      context
+    );
+        },
             child: Text('Submit Paper'),
           ),
           SizedBox(height: 20),
