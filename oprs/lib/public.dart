@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:oprs/submitpaperform.dart'; 
 
 // Define a class for research papers
 class ResearchPaper {
   final String title;
-  final String author;
-  final double score;
+  final DateTime submissionTime;
 
-  ResearchPaper(
-      {required this.title, required this.author, required this.score});
+  ResearchPaper({required this.title, required this.submissionTime});
 }
 
 // Sample data for research papers
 List<ResearchPaper> reviewPapers = [
-  ResearchPaper(title: "Paper 1", author: "Author 1", score: 4.5),
-  ResearchPaper(title: "Paper 2", author: "Author 2", score: 3.8),
-  ResearchPaper(title: "Paper 3", author: "Author 3", score: 4.2),
+  ResearchPaper(title: "Paper 1", submissionTime: DateTime.now()),
+  ResearchPaper(title: "Paper 2", submissionTime: DateTime.now()),
+  ResearchPaper(title: "Paper 3", submissionTime: DateTime.now()),
   // Add more sample data as needed
-];
-
-List<ResearchPaper> submittedPapers = [
-  ResearchPaper(title: "Submitted Paper 1", author: "", score: 0),
-  ResearchPaper(title: "Submitted Paper 2", author: "", score: 0),
-  ResearchPaper(title: "Submitted Paper 3", author: "", score: 0),
-  // Add more dummy data as needed
 ];
 
 class Review extends StatelessWidget {
@@ -55,40 +47,39 @@ class ResearchPaperPage extends StatelessWidget {
             child: ListView.builder(
               itemCount: reviewPapers.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(reviewPapers[index].title),
-                  subtitle: Text(reviewPapers[index].author),
-                  trailing: Text(
-                    'Score: ${reviewPapers[index].score.toString()}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                );
-              },
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: submittedPapers.length,
-              itemBuilder: (context, index) {
                 // Calculate time left
-                DateTime now = DateTime.now();
-                DateTime paperSubmittedTime = DateTime.now().subtract(Duration(hours: 1)); // Dummy value for submitted time
-                Duration difference = paperSubmittedTime.difference(now);
+                Duration difference = DateTime.now().difference(reviewPapers[index].submissionTime);
 
                 // Format time left
                 String timeLeft = "${difference.inHours}h ${difference.inMinutes.remainder(60)}m";
 
-                return ListTile(
-                  title: Text(submittedPapers[index].title),
-                  trailing: Text(
-                    'Time Left: $timeLeft',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                return InkWell(
+                  onTap: () {
+                    // Handle paper title tap
+                    print('Paper title tapped: ${reviewPapers[index].title}');
+                  },
+                  child: ListTile(
+                    title: Text(reviewPapers[index].title),
+                    trailing: Text(
+                      'Time Left: $timeLeft',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 );
               },
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Handle add new paper action
+           Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UploadPaperPage()), // Navigate to the Submit Paper page
+    );
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
