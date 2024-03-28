@@ -20,7 +20,7 @@ List<ReviewPaper> researchPapers = [
 ];
 
 class ReviewForm extends StatelessWidget {
-  const ReviewForm({super.key});
+  ReviewForm({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +29,20 @@ class ReviewForm extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ReviewFormPage(),
+      home: ReviewFormPage(),
     );
   }
 }
 
 class ReviewFormPage extends StatelessWidget {
-  const ReviewFormPage({super.key});
+  ReviewFormPage({super.key});
+  TextEditingController noveltyScore=TextEditingController();
+  TextEditingController accuracyScore=TextEditingController();
+  TextEditingController relevanceScore=TextEditingController();
+  TextEditingController ethicalityScore=TextEditingController();
+  TextEditingController understandabilityScore=TextEditingController();
+  TextEditingController acknowledgementScore=TextEditingController();
+  TextEditingController citationsScore=TextEditingController();
   
   @override
   Widget build(BuildContext context) {
@@ -49,6 +56,7 @@ class ReviewFormPage extends StatelessWidget {
               width: 100.0,
               child: TextFormField(
                 keyboardType: TextInputType.number,
+                controller: noveltyScore,
                 decoration: const InputDecoration(
                     border: UnderlineInputBorder(), labelText: 'Novelty'),
               ),
@@ -57,8 +65,55 @@ class ReviewFormPage extends StatelessWidget {
               width: 100.0,
               child: TextFormField(
                 keyboardType: TextInputType.number,
+                controller: accuracyScore,
                 decoration: const InputDecoration(
-                    border: UnderlineInputBorder(), labelText: 'Correctness'),
+                    border: UnderlineInputBorder(), labelText: 'Accuracy'),
+              ),
+            ),
+            SizedBox(
+              width: 100.0,
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: relevanceScore,
+                decoration: const InputDecoration(
+                    border: UnderlineInputBorder(), labelText: 'Relevance'),
+              ),
+            ),
+
+            SizedBox(
+              width: 100.0,
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: ethicalityScore,
+                decoration: const InputDecoration(
+                    border: UnderlineInputBorder(), labelText: 'Ethicality'),
+              ),
+            ),
+            SizedBox(
+              width: 100.0,
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: understandabilityScore,
+                decoration: const InputDecoration(
+                    border: UnderlineInputBorder(), labelText: 'Understandability'),
+              ),
+            ),
+            SizedBox(
+              width: 100.0,
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: acknowledgementScore,
+                decoration: const InputDecoration(
+                    border: UnderlineInputBorder(), labelText: 'Acknowledgement of Limitations'),
+              ),
+            ),
+            SizedBox(
+              width: 100.0,
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: citationsScore,
+                decoration: const InputDecoration(
+                    border: UnderlineInputBorder(), labelText: 'Appropriate Citations'),
               ),
             ),
           ],

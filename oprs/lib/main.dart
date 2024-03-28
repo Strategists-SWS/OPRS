@@ -40,7 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
   //int _currentIndex = 0;
 
   final List<Widget> _tabs = [
-    const Review(),
     const MyLoginPage(),
   ];
 
@@ -54,7 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
           shadowColor: Colors.blue,
           bottom: const TabBar(
             tabs: [
-              Tab(icon: Icon(Icons.favorite), text: 'Reviewed Papers'),
               Tab(icon: Icon(Icons.person), text: 'Login/Signup'),
             ],
           ),
