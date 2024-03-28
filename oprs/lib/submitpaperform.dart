@@ -39,7 +39,7 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
     }
   }
 
-  void _submitPaper(BuildContext context) {
+  void _submitPaper(BuildContext pcontext) {
     String title = _titleController.text;
     String topics = _topicsController.text;
     if (_pickedFile != null) {
@@ -59,7 +59,7 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context); // Close the dialog
-                  
+                  Navigator.pop(pcontext);
                 },
                 child: Text("Close"),
               ),
@@ -96,13 +96,7 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
           ),
           SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () {
-          // Handle add new paper action
-          _submitPaper(context);
-           Navigator.pop(
-      context
-    );
-        },
+            onPressed: () => _submitPaper(context),
             child: Text('Submit Paper'),
           ),
           SizedBox(height: 20),

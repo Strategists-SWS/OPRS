@@ -74,6 +74,7 @@ class ResearchPaperPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Handle add new paper action
+          
            Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => UploadPaperPage()), // Navigate to the Submit Paper page
