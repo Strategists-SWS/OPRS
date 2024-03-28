@@ -42,14 +42,9 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
   void _submitPaper(BuildContext pcontext) {
     String title = _titleController.text;
     String topics = _topicsController.text;
-    if (_pickedFile != null) {
-      print('Title: $title');
-      print('Related Topics: $topics');
-      print('File Name: ${_pickedFile!.name}');
-      print('File Size: ${_pickedFile!.size} bytes');
-
-      // Show success message and return to the Review widget
+    if (title.isEmpty) {
       showDialog(
+<<<<<<< HEAD
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -69,6 +64,90 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
       );
     } else {
       print('Please select a PDF file.');
+=======
+		context: context,
+		builder: (BuildContext context) {
+		  return AlertDialog(
+		    title: Text("Error"),
+		    content: Text("Title can't be empty"),
+		    actions: [
+		      TextButton(
+		        onPressed: () {
+		          Navigator.pop(context); // Close the dialog
+		        },
+		        child: Text("Close"),
+		      ),
+		    ],
+		  );
+		},
+	      );
+    }
+    else if (topics.isEmpty) {
+      showDialog(
+		context: context,
+		builder: (BuildContext context) {
+		  return AlertDialog(
+		    title: Text("Error"),
+		    content: Text("Related topics can't be empty"),
+		    actions: [
+		      TextButton(
+		        onPressed: () {
+		          Navigator.pop(context); // Close the dialog
+		        },
+		        child: Text("Close"),
+		      ),
+		    ],
+		  );
+		},
+	      ); 
+    }
+    else{
+	    if (_pickedFile != null) {
+	      print('Title: $title');
+	      print('Related Topics: $topics');
+	      print('File Name: ${_pickedFile!.name}');
+	      print('File Size: ${_pickedFile!.size} bytes');
+
+	      // Show success message and return to the Review widget
+	      showDialog(
+		context: context,
+		builder: (BuildContext context) {
+		  return AlertDialog(
+		    title: Text("Success"),
+		    content: Text("The paper has been submitted successfully."),
+		    actions: [
+		      TextButton(
+		        onPressed: () {
+		          Navigator.pop(context); // Close the dialog
+		          Navigator.pop(pcontext);
+		        },
+		        child: Text("Close"),
+		      ),
+		    ],
+		  );
+		},
+	      );
+	    } 
+	    else {
+	      showDialog(
+		context: context,
+		builder: (BuildContext context) {
+		  return AlertDialog(
+		    title: Text("Error"),
+		    content: Text("Please select a PDF"),
+		    actions: [
+		      TextButton(
+		        onPressed: () {
+		          Navigator.pop(context); // Close the dialog
+		        },
+		        child: Text("Close"),
+		      ),
+		    ],
+		  );
+		},
+	      );
+	    }
+>>>>>>> 779617421762814c5c1ee8cda6b20dc73822711b
     }
   }
 
@@ -120,4 +199,5 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
     );
   }
 }
+
 
