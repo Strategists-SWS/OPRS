@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oprs/reviewer.dart';
 import 'package:oprs/sign_in.dart';
+import 'package:oprs/assignedpapers.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -14,6 +15,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Widget> _tabs = [
     const AuthenticationWrapper(),
+    const Abc(),
     const ReviewPage(),
   ];
 
@@ -28,6 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
           bottom: const TabBar(
             tabs: [
               Tab(icon: Icon(Icons.favorite), text: 'Submitted Papers'),
+              Tab(icon: Icon(Icons.star), text: 'Assigned Papers'),
               Tab(icon: Icon(Icons.book), text: 'Reviewed Papers'),
             ],
           ),
