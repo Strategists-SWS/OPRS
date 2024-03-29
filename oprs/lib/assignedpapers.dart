@@ -56,7 +56,7 @@ class AssignedPapersPage extends StatelessWidget {
           return ListView(
             children: snapshot.data!.docs.map((document) {
               DateTime assignmentDate =
-                  (document['assignmentDate'] as Timestamp).toDate();
+                  (document['submissionDate'] as Timestamp).toDate();
               Duration timeDifference =
                   DateTime.now().difference(assignmentDate);
               String timeSinceAssignment = '${timeDifference.inDays} days ago';
@@ -74,8 +74,8 @@ class AssignedPapersPage extends StatelessWidget {
                 onTap: canGrade
                     ? () async {
                         String pdfUrl = document['url'];
-                        if (await canLaunch(pdfUrl)) {
-                          await launch(pdfUrl);
+                        if (await canLaunchUrl(Uri.parse(pdfUrl))) {
+                          await launchUrl(Uri.parse(pdfUrl));
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: const Text('Could not open PDF.'),
