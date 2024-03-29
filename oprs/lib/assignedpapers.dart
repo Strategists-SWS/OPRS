@@ -29,7 +29,7 @@ class Abc extends StatelessWidget {
 
 class AssignedPapersPage extends StatelessWidget {
   final String userId;
-
+  
   AssignedPapersPage({required this.userId});
 
   @override
@@ -69,15 +69,15 @@ class AssignedPapersPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(timeSinceAssignment),
-                    if (canGrade) Text('You can grade this paper.'),
+                    if (canGrade) const Text('You can grade this paper.'),
                   ],
                 ),
                 onTap: canGrade
                     ? () async {
                         String pdfUrl = document['url'];
                         if (document['isReviewed'] == true) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: const Text(
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
                                 'This paper has already been reviewed.'),
                           ));
                           return;
@@ -92,8 +92,8 @@ class AssignedPapersPage extends StatelessWidget {
                         if (await canLaunchUrl(Uri.parse(pdfUrl))) {
                           await launchUrl(Uri.parse(pdfUrl));
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: const Text('Could not open PDF.'),
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('Could not open PDF.'),
                           ));
                         }
                       }

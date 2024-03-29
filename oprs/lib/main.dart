@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oprs/firebase_options.dart';
 import 'package:oprs/sign_in.dart';
-import 'package:oprs/public.dart';
 import 'package:oprs/loginchange.dart';
 import 'package:provider/provider.dart';
 

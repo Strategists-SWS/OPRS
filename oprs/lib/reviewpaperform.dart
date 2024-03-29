@@ -115,7 +115,7 @@ class _ReviewFormPageState extends State<ReviewPage> {
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection(
-              'your_collection') // Replace 'your_collection' with the name of your collection in Firestore
+              'reviews') // Replace 'your_collection' with the name of your collection in Firestore
           .where('url', isEqualTo: url)
           .get();
 
