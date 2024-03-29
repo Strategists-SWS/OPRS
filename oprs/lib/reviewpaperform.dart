@@ -158,73 +158,71 @@ class _ReviewFormPageState extends State<ReviewPage> {
         title: const Text('Review Papers'),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 100.0,
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              controller: noveltyScore,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(), labelText: 'Novelty'),
+          TextFormField(
+            keyboardType: TextInputType.number,
+            controller: noveltyScore,
+            decoration: const InputDecoration(
+              labelText: 'Novelty',
+              border: UnderlineInputBorder(),
             ),
           ),
-          SizedBox(
-            width: 100.0,
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              controller: accuracyScore,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(), labelText: 'Accuracy'),
+          SizedBox(height: 10),
+          TextFormField(
+            keyboardType: TextInputType.number,
+            controller: accuracyScore,
+            decoration: const InputDecoration(
+              labelText: 'Accuracy',
+              border: UnderlineInputBorder(),
             ),
           ),
-          SizedBox(
-            width: 100.0,
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              controller: relevanceScore,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(), labelText: 'Relevance'),
+          SizedBox(height: 10),
+          TextFormField(
+            keyboardType: TextInputType.number,
+            controller: relevanceScore,
+            decoration: const InputDecoration(
+              labelText: 'Relevance',
+              border: UnderlineInputBorder(),
             ),
           ),
-          SizedBox(
-            width: 100.0,
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              controller: ethicalityScore,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(), labelText: 'Ethicality'),
+          SizedBox(height: 10),
+          TextFormField(
+            keyboardType: TextInputType.number,
+            controller: ethicalityScore,
+            decoration: const InputDecoration(
+              labelText: 'Ethicality',
+              border: UnderlineInputBorder(),
             ),
           ),
-          SizedBox(
-            width: 100.0,
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              controller: understandabilityScore,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Understandability'),
+          SizedBox(height: 10),
+          TextFormField(
+            keyboardType: TextInputType.number,
+            controller: understandabilityScore,
+            decoration: const InputDecoration(
+              labelText: 'Understandability',
+              border: UnderlineInputBorder(),
             ),
           ),
-          SizedBox(
-            width: 100.0,
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              controller: acknowledgementScore,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Acknowledgement of Limitations'),
+          SizedBox(height: 10),
+          TextFormField(
+            keyboardType: TextInputType.number,
+            controller: acknowledgementScore,
+            decoration: const InputDecoration(
+              labelText: 'Acknowledgement of Limitations',
+              border: UnderlineInputBorder(),
             ),
           ),
-          SizedBox(
-            width: 100.0,
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              controller: citationsScore,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Appropriate Citations'),
+          SizedBox(height: 10),
+          TextFormField(
+            keyboardType: TextInputType.number,
+            controller: citationsScore,
+            decoration: const InputDecoration(
+              labelText: 'Appropriate Citations',
+              border: UnderlineInputBorder(),
             ),
           ),
+          SizedBox(height: 20),
           ElevatedButton(
             onPressed: () => _reviewPaper(context),
             child: const Text('Submit Paper'),
