@@ -20,7 +20,7 @@ class Abc extends StatelessWidget {
           String userId = snapshot.data!.uid;
           return AssignedPapersPage(userId: userId);
         } else {
-          return const MyLoginPage(); // Navigate to your sign in screen if the user is not logged in
+          return  MyLoginPage(); // Navigate to your sign in screen if the user is not logged in
         }
       },
     );
@@ -29,7 +29,7 @@ class Abc extends StatelessWidget {
 
 class AssignedPapersPage extends StatelessWidget {
   final String userId;
-  
+
   AssignedPapersPage({required this.userId});
 
   @override

@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:multi_dropdown/enum/app_enums.dart';
-import 'package:multi_dropdown/models/chip_config.dart';
-import 'package:multi_dropdown/models/network_config.dart';
-import 'package:multi_dropdown/models/value_item.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:multi_dropdown/widgets/hint_text.dart';
-import 'package:multi_dropdown/widgets/selection_chip.dart';
-import 'package:multi_dropdown/widgets/single_selected_item.dart';
 
 
 class Update extends StatefulWidget {
@@ -19,13 +12,6 @@ class Update extends StatefulWidget {
 class _UpdateState extends State<Update> {
   String _name = '';
   List<String> _selectedTopics = [];
-
-  final List<String> _proficiencyTopics = [
-    'Topic 1',
-    'Topic 2',
-    'Topic 3',
-    // Add more topics as needed
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +42,7 @@ class _UpdateState extends State<Update> {
                 debugPrint(options.toString());
               },
               options: const <ValueItem>[
+<<<<<<< HEAD
                 ValueItem(label: 'Algorithms', value: '1'),
                 ValueItem(label: 'Artificial Intelligence and Machine Learning', value: '2'),
                 ValueItem(label: 'Bioinformatics and Computational Biology', value: '3'),
@@ -69,6 +56,20 @@ class _UpdateState extends State<Update> {
                 ValueItem(label: 'OQuantum Computing and Quantum Information Science', value: '11'),
                 ValueItem(label: 'Robotics and Autonomous Systems', value: '12'),
                 ValueItem(label: 'Software Engineering', value: '12'),
+=======
+                ValueItem(label: 'Option 1', value: '1'),
+                ValueItem(label: 'Option 2', value: '2'),
+                ValueItem(label: 'Option 3', value: '3'),
+                ValueItem(label: 'Option 4', value: '4'),
+                ValueItem(label: 'Option 5', value: '5'),
+                ValueItem(label: 'Option 6', value: '6'),
+                ValueItem(label: 'Option 7', value: '7'),
+                ValueItem(label: 'Option 8', value: '8'),
+                ValueItem(label: 'Option 9', value: '9'),
+                ValueItem(label: 'Option 10', value: '10'),
+                ValueItem(label: 'Option 11', value: '11'),
+                ValueItem(label: 'Option 12', value: '12'),
+>>>>>>> origin/master
               ],
               maxItems: 200,
               disabledOptions: const [ValueItem(label: 'Option 1', value: '1')],
