@@ -68,22 +68,25 @@ class _ReviewFormPageState extends State<ReviewPage> {
     }
     int noveltyS = int.parse(noveltyScore.text);
     int accuracyS = int.parse(accuracyScore.text);
-    int relevanceS = int.parse(noveltyScore.text);
-    int ethicalityS = int.parse(accuracyScore.text);
-    int understandabilityS = int.parse(noveltyScore.text);
-    int acknowledgementS = int.parse(accuracyScore.text);
+    int relevanceS = int.parse(relevanceScore.text);
+    int ethicalityS = int.parse(ethicalityScore.text);
+    int understandabilityS = int.parse(understandabilityScore.text);
+    int acknowledgementS = int.parse(acknowledgementScore.text);
+    int citationsS = int.parse(citationsScore.text);
     if ((noveltyS > 10 ||
             accuracyS > 10 ||
             relevanceS > 10 ||
             ethicalityS > 10 ||
             understandabilityS > 10 ||
-            acknowledgementS > 10) ||
+            acknowledgementS > 10 ||
+            citationsS > 10) ||
         (noveltyS < 0 ||
             accuracyS < 0 ||
             relevanceS < 0 ||
             ethicalityS < 0 ||
             understandabilityS < 0 ||
-            acknowledgementS < 0)) {
+            acknowledgementS < 0 ||
+            citationsS < 0)) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -113,8 +116,8 @@ class _ReviewFormPageState extends State<ReviewPage> {
               relevanceS +
               ethicalityS +
               understandabilityS +
-              acknowledgementS) /
-          6;
+              acknowledgementS +
+              citationsS) / 7;
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection(

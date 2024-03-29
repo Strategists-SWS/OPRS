@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oprs/reviewer.dart';
 import 'package:oprs/sign_in.dart';
 import 'package:oprs/assignedpapers.dart';
+import 'package:oprs/userprofile.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -17,6 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const AuthenticationWrapper(),
     const Abc(),
     const ReviewPage(),
+    const Update(),
   ];
 
   @override
@@ -32,6 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Tab(icon: Icon(Icons.favorite), text: 'Submitted Papers'),
               Tab(icon: Icon(Icons.star), text: 'Assigned Papers'),
               Tab(icon: Icon(Icons.book), text: 'Reviewed Papers'),
+              Tab(icon: Icon(Icons.person), text: 'Update Profile'),
             ],
           ),
         ),
