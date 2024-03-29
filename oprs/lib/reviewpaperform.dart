@@ -1,41 +1,47 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ReviewForm extends StatelessWidget {
-  const ReviewForm({super.key});
+  final String url;
+  ReviewForm({required this.url});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Upload Paper'),
       ),
-      body: const ReviewPage(),
+      body: ReviewPage(url: url),
     );
   }
 }
 
 class ReviewPage extends StatefulWidget {
-  const ReviewPage({super.key});
+  final String url;
+  const ReviewPage({required this.url});
   @override
-  ReviewFormPage createState() => ReviewFormPage();
+  ReviewFormPage createState() => ReviewFormPage(this.url);
 }
 
 class ReviewFormPage extends State<ReviewPage> {
-  TextEditingController noveltyScore=TextEditingController();
-  TextEditingController accuracyScore=TextEditingController();
-  TextEditingController relevanceScore=TextEditingController();
-  TextEditingController ethicalityScore=TextEditingController();
-  TextEditingController understandabilityScore=TextEditingController();
-  TextEditingController acknowledgementScore=TextEditingController();
-  TextEditingController citationsScore=TextEditingController();
+  final String url;
+  ReviewFormPage(this.url);
+  TextEditingController noveltyScore = TextEditingController();
+  TextEditingController accuracyScore = TextEditingController();
+  TextEditingController relevanceScore = TextEditingController();
+  TextEditingController ethicalityScore = TextEditingController();
+  TextEditingController understandabilityScore = TextEditingController();
+  TextEditingController acknowledgementScore = TextEditingController();
+  TextEditingController citationsScore = TextEditingController();
 
   void _reviewPaper(BuildContext pcontext) async {
-    if (noveltyScore.text.isEmpty || accuracyScore.text.isEmpty || relevanceScore.text.isEmpty || ethicalityScore.text.isEmpty || understandabilityScore.text.isEmpty || acknowledgementScore.text.isEmpty) {
+    if (noveltyScore.text.isEmpty ||
+        accuracyScore.text.isEmpty ||
+        relevanceScore.text.isEmpty ||
+        ethicalityScore.text.isEmpty ||
+        understandabilityScore.text.isEmpty ||
+        acknowledgementScore.text.isEmpty) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -61,14 +67,24 @@ class ReviewFormPage extends State<ReviewPage> {
     int ethicalityS = int.parse(accuracyScore.text);
     int understandabilityS = int.parse(noveltyScore.text);
     int acknowledgementS = int.parse(accuracyScore.text);
-    if((noveltyS>5||accuracyS>5||relevanceS>5||ethicalityS>5||understandabilityS>5||acknowledgementS>5)||(noveltyS<0||accuracyS<0||relevanceS<0||ethicalityS<0||understandabilityS<0||acknowledgementS<0))
-    {
+    if ((noveltyS > 10 ||
+            accuracyS > 10 ||
+            relevanceS > 10 ||
+            ethicalityS > 10 ||
+            understandabilityS > 10 ||
+            acknowledgementS > 10) ||
+        (noveltyS < 0 ||
+            accuracyS < 0 ||
+            relevanceS < 0 ||
+            ethicalityS < 0 ||
+            understandabilityS < 0 ||
+            acknowledgementS < 0)) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Error"),
-            content: const Text("Scores Should be in range 0-5"),
+            content: const Text("Scores Should be in range 0-10"),
             actions: [
               TextButton(
                 onPressed: () {
@@ -81,25 +97,38 @@ class ReviewFormPage extends State<ReviewPage> {
         },
       );
       return;
-    }
-    else {
+    } else {
       DateTime submissionDate = DateTime.now();
-     
+
       User? user = FirebaseAuth.instance.currentUser;
       if (user == null) {
         throw Exception("User not logged in");
       }
-      Reference storageReference = FirebaseStorage.instance
-          .ref()
-          .child('pdfs/${submissionDate.millisecondsSinceEpoch}.pdf');
-      double netS=(noveltyS+accuracyS+relevanceS+ethicalityS+understandabilityS+acknowledgementS)/6;
 
-      // Store paper details in Firestore
-      await FirebaseFirestore.instance.collection('papers').add({
+      double netS = (noveltyS +
+              accuracyS +
+              relevanceS +
+              ethicalityS +
+              understandabilityS +
+              acknowledgementS) /
+          6;
+
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection(
+              'your_collection') // Replace 'your_collection' with the name of your collection in Firestore
+          .where('url', isEqualTo: url)
+          .get();
+
+      Map<String, dynamic> newData = {
+        'isReviewed': true,
         'userId': user.uid,
-        'score': netS,
-        'submissionDate': submissionDate,
-      });
+        'grade': netS,
+      };
+      // Loop through each document with matching URL and update the data
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        await documentSnapshot.reference.update(newData);
+      }
+
       // Show success message and return to the Review widget
       showDialog(
         context: context,
@@ -121,14 +150,14 @@ class ReviewFormPage extends State<ReviewPage> {
       );
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Review Papers'),
-      ),
-      body: Column(
+        appBar: AppBar(
+          title: const Text('Review Papers'),
+        ),
+        body: Column(
           children: [
             SizedBox(
               width: 100.0,
@@ -157,7 +186,6 @@ class ReviewFormPage extends State<ReviewPage> {
                     border: UnderlineInputBorder(), labelText: 'Relevance'),
               ),
             ),
-
             SizedBox(
               width: 100.0,
               child: TextFormField(
@@ -173,7 +201,8 @@ class ReviewFormPage extends State<ReviewPage> {
                 keyboardType: TextInputType.number,
                 controller: understandabilityScore,
                 decoration: const InputDecoration(
-                    border: UnderlineInputBorder(), labelText: 'Understandability'),
+                    border: UnderlineInputBorder(),
+                    labelText: 'Understandability'),
               ),
             ),
             SizedBox(
@@ -182,7 +211,8 @@ class ReviewFormPage extends State<ReviewPage> {
                 keyboardType: TextInputType.number,
                 controller: acknowledgementScore,
                 decoration: const InputDecoration(
-                    border: UnderlineInputBorder(), labelText: 'Acknowledgement of Limitations'),
+                    border: UnderlineInputBorder(),
+                    labelText: 'Acknowledgement of Limitations'),
               ),
             ),
             SizedBox(
@@ -191,16 +221,16 @@ class ReviewFormPage extends State<ReviewPage> {
                 keyboardType: TextInputType.number,
                 controller: citationsScore,
                 decoration: const InputDecoration(
-                    border: UnderlineInputBorder(), labelText: 'Appropriate Citations'),
+                    border: UnderlineInputBorder(),
+                    labelText: 'Appropriate Citations'),
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _reviewPaper(context),
               child: const Text('Submit Paper'),
-          ),
+            ),
           ],
-      )
-    );
+        ));
   }
 }

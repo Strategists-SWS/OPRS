@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:oprs/sign_in.dart';
+import 'package:oprs/reviewpaperform.dart';
 
 class Abc extends StatelessWidget {
   const Abc({super.key});
@@ -74,6 +75,20 @@ class AssignedPapersPage extends StatelessWidget {
                 onTap: canGrade
                     ? () async {
                         String pdfUrl = document['url'];
+                        if (document['isReviewed'] == true) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: const Text(
+                                'This paper has already been reviewed.'),
+                          ));
+                          return;
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReviewForm(url: pdfUrl),
+                            ),
+                          );
+                        }
                         if (await canLaunchUrl(Uri.parse(pdfUrl))) {
                           await launchUrl(Uri.parse(pdfUrl));
                         } else {
