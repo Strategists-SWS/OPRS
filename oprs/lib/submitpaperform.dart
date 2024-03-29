@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:oprs/public.dart'; // Importing the "public.dart" page
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UploadPaperPage extends StatelessWidget {
-  const UploadPaperPage({Key? key});
+  const UploadPaperPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,15 +18,15 @@ class UploadPaperPage extends StatelessWidget {
 }
 
 class UploadPaperForm extends StatefulWidget {
-  const UploadPaperForm({Key? key});
+  const UploadPaperForm({super.key});
   @override
   _UploadPaperFormState createState() => _UploadPaperFormState();
 }
 
 class _UploadPaperFormState extends State<UploadPaperForm> {
   PlatformFile? _pickedFile; // Initialized to null
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _topicsController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _topicsController = TextEditingController();
 
   void _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -39,93 +41,105 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
     }
   }
 
-  void _submitPaper(BuildContext pcontext) {
+  void _submitPaper(BuildContext pcontext) async {
     String title = _titleController.text;
     String topics = _topicsController.text;
+    DateTime submissionDate = DateTime.now();
     if (title.isEmpty) {
       showDialog(
-		context: context,
-		builder: (BuildContext context) {
-		  return AlertDialog(
-		    title: Text("Error"),
-		    content: Text("Title can't be empty"),
-		    actions: [
-		      TextButton(
-		        onPressed: () {
-		          Navigator.pop(context); // Close the dialog
-		        },
-		        child: Text("Close"),
-		      ),
-		    ],
-		  );
-		},
-	      );
-    }
-    else if (topics.isEmpty) {
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Error"),
+            content: const Text("Title can't be empty"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                },
+                child: const Text("Close"),
+              ),
+            ],
+          );
+        },
+      );
+    } else if (topics.isEmpty) {
       showDialog(
-		context: context,
-		builder: (BuildContext context) {
-		  return AlertDialog(
-		    title: Text("Error"),
-		    content: Text("Related topics can't be empty"),
-		    actions: [
-		      TextButton(
-		        onPressed: () {
-		          Navigator.pop(context); // Close the dialog
-		        },
-		        child: Text("Close"),
-		      ),
-		    ],
-		  );
-		},
-	      ); 
-    }
-    else{
-	    if (_pickedFile != null) {
-	      print('Title: $title');
-	      print('Related Topics: $topics');
-	      print('File Name: ${_pickedFile!.name}');
-	      print('File Size: ${_pickedFile!.size} bytes');
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Error"),
+            content: const Text("Related topics can't be empty"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                },
+                child: const Text("Close"),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      if (_pickedFile != null) {
+        User? user = FirebaseAuth.instance.currentUser;
+        if (user == null) {
+          throw Exception("User not logged in");
+        }
+        Reference storageReference = FirebaseStorage.instance
+            .ref()
+            .child('pdfs/${submissionDate.millisecondsSinceEpoch}.pdf');
+        UploadTask uploadTask = storageReference.putData(_pickedFile!.bytes!);
+        TaskSnapshot taskSnapshot = await uploadTask;
+        String pdfUrl = await taskSnapshot.ref.getDownloadURL();
 
-	      // Show success message and return to the Review widget
-	      showDialog(
-		context: context,
-		builder: (BuildContext context) {
-		  return AlertDialog(
-		    title: Text("Success"),
-		    content: Text("The paper has been submitted successfully."),
-		    actions: [
-		      TextButton(
-		        onPressed: () {
-		          Navigator.pop(context); // Close the dialog
-		          Navigator.pop(pcontext);
-		        },
-		        child: Text("Close"),
-		      ),
-		    ],
-		  );
-		},
-	      );
-	    } 
-	    else {
-	      showDialog(
-		context: context,
-		builder: (BuildContext context) {
-		  return AlertDialog(
-		    title: Text("Error"),
-		    content: Text("Please select a PDF"),
-		    actions: [
-		      TextButton(
-		        onPressed: () {
-		          Navigator.pop(context); // Close the dialog
-		        },
-		        child: Text("Close"),
-		      ),
-		    ],
-		  );
-		},
-	      );
-	    }
+        // Store paper details in Firestore
+        await FirebaseFirestore.instance.collection('papers').add({
+          'userId': user.uid,
+          'title': title,
+          'relatedTopics': topics,
+          'url': pdfUrl,
+          'submissionDate': submissionDate,
+        });
+        // Show success message and return to the Review widget
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Success"),
+              content: const Text("The paper has been submitted successfully."),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close the dialog
+                    Navigator.pop(pcontext);
+                  },
+                  child: const Text("Close"),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Error"),
+              content: const Text("Please select a PDF"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close the dialog
+                  },
+                  child: const Text("Close"),
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
 
@@ -139,35 +153,35 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
         children: <Widget>[
           TextField(
             controller: _titleController,
-            decoration: InputDecoration(labelText: 'Title'),
+            decoration: const InputDecoration(labelText: 'Title'),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           TextField(
             controller: _topicsController,
-            decoration: InputDecoration(labelText: 'Related Topics'),
+            decoration: const InputDecoration(labelText: 'Related Topics'),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: _pickFile,
-            child: Text('Choose PDF'),
+            child: const Text('Choose PDF'),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () => _submitPaper(context),
-            child: Text('Submit Paper'),
+            child: const Text('Submit Paper'),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           _pickedFile != null
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'File Name: ${_pickedFile!.name}',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                      style: const TextStyle(fontStyle: FontStyle.italic),
                     ),
                     Text(
                       'File Size: ${_pickedFile!.size} bytes',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                      style: const TextStyle(fontStyle: FontStyle.italic),
                     ),
                   ],
                 )
@@ -177,5 +191,3 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
     );
   }
 }
-
-

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:oprs/public.dart';
 import 'package:oprs/reviewer.dart';
+import 'package:oprs/sign_in.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -13,7 +13,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //int _currentIndex = 0;
 
   final List<Widget> _tabs = [
-    const Review(),
+    const AuthenticationWrapper(),
     const ReviewPage(),
   ];
 

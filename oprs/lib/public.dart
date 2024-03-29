@@ -1,87 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:oprs/submitpaperform.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:oprs/submitpaperform.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-// Define a class for research papers
-class ResearchPaper {
-  final String title;
-  final DateTime submissionTime;
+class SubmitPage extends StatelessWidget {
+  final String userId;
 
-  ResearchPaper({required this.title, required this.submissionTime});
-}
+  SubmitPage({required this.userId});
 
-// Sample data for research papers
-List<ResearchPaper> reviewPapers = [
-  ResearchPaper(title: "Paper 1", submissionTime: DateTime.now()),
-  ResearchPaper(title: "Paper 2", submissionTime: DateTime.now()),
-  ResearchPaper(title: "Paper 3", submissionTime: DateTime.now()),
-  // Add more sample data as needed
-];
-
-class Review extends StatelessWidget {
-  const Review({Key? key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Research Papers',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const ResearchPaperPage(),
-    );
-  }
-}
-
-class ResearchPaperPage extends StatelessWidget {
-  const ResearchPaperPage({Key? key});
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Research Papers'),
+        title: const Text('My Papers'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: reviewPapers.length,
-              itemBuilder: (context, index) {
-                // Calculate time left
-                Duration difference = DateTime.now().difference(reviewPapers[index].submissionTime);
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('papers')
+              .where('userId', isEqualTo: userId)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-                // Format time left
-                String timeLeft = "${difference.inHours}h ${difference.inMinutes.remainder(60)}m";
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return const Center(
+                child: Text('No papers uploaded yet.'),
+              );
+            }
 
-                return InkWell(
-                  onTap: () {
-                    // Handle paper title tap
-                    print('Paper title tapped: ${reviewPapers[index].title}');
+            return ListView(
+              children: snapshot.data!.docs.map((document) {
+                DateTime submissionDate = (document['submissionDate'] as Timestamp).toDate();
+                Duration timeDifference = DateTime.now().difference(submissionDate);
+                String timeSinceSubmission = '${timeDifference.inDays} days ago';
+
+                return ListTile(
+                  title: Text(document['title']),
+                  subtitle: Text(timeSinceSubmission),
+                  onTap: () async {
+                    String pdfUrl = document['url'];
+                    if (await canLaunchUrl(Uri.parse(pdfUrl))) {
+                      await launchUrl(Uri.parse(pdfUrl));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: const Text('Could not open PDF.'),
+                      ));
+                    }
                   },
-                  child: ListTile(
-                    title: Text(reviewPapers[index].title),
-                    trailing: Text(
-                      'Time Left: $timeLeft',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
                 );
-              },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Handle add new paper action
-           Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => UploadPaperPage()), // Navigate to the Submit Paper page
-    );
+              }).toList(),
+            );
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // Navigate to the upload page
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const UploadPaperPage()),
+            );  
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
 }
-

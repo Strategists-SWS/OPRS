@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:oprs/homepage.dart';
-import 'package:oprs/landing.dart';
+import 'package:oprs/public.dart';
 
 class MyLoginPage extends StatelessWidget {
   const MyLoginPage({super.key});
@@ -43,6 +43,28 @@ class MyLoginPage extends StatelessWidget {
       },
       onRecoverPassword: (_) async {
         return null;
+      },
+    );
+  }
+}
+
+class AuthenticationWrapper extends StatelessWidget {
+  const AuthenticationWrapper({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, AsyncSnapshot<User?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator(); // or any loading indicator
+        }
+
+        if (snapshot.hasData) {
+          String userId = snapshot.data!.uid;
+          return SubmitPage(userId: userId);
+        } else {
+          return const MyLoginPage(); // Navigate to your sign in screen if the user is not logged in
+        }
       },
     );
   }
