@@ -38,7 +38,7 @@ class MyLoginPage extends StatelessWidget {
       onSignup: trySignUp,
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => const MyHomePage(),
+          builder: (context) => const Intermediate(),
         ));
       },
       onRecoverPassword: (_) async {
