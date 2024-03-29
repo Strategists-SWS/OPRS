@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 class ReviewForm extends StatelessWidget {
   final String url;
@@ -157,75 +160,192 @@ class _ReviewFormPageState extends State<ReviewPage> {
       appBar: AppBar(
         title: const Text('Review Papers'),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Row(
         children: [
-          TextFormField(
-            keyboardType: TextInputType.number,
-            controller: noveltyScore,
-            decoration: const InputDecoration(
-              labelText: 'Novelty',
-              border: UnderlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 10),
-          TextFormField(
-            keyboardType: TextInputType.number,
-            controller: accuracyScore,
-            decoration: const InputDecoration(
-              labelText: 'Accuracy',
-              border: UnderlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 10),
-          TextFormField(
-            keyboardType: TextInputType.number,
-            controller: relevanceScore,
-            decoration: const InputDecoration(
-              labelText: 'Relevance',
-              border: UnderlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 10),
-          TextFormField(
-            keyboardType: TextInputType.number,
-            controller: ethicalityScore,
-            decoration: const InputDecoration(
-              labelText: 'Ethicality',
-              border: UnderlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 10),
-          TextFormField(
-            keyboardType: TextInputType.number,
-            controller: understandabilityScore,
-            decoration: const InputDecoration(
-              labelText: 'Understandability',
-              border: UnderlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 10),
-          TextFormField(
-            keyboardType: TextInputType.number,
-            controller: acknowledgementScore,
-            decoration: const InputDecoration(
-              labelText: 'Acknowledgement of Limitations',
-              border: UnderlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 10),
-          TextFormField(
-            keyboardType: TextInputType.number,
-            controller: citationsScore,
-            decoration: const InputDecoration(
-              labelText: 'Appropriate Citations',
-              border: UnderlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () => _reviewPaper(context),
-            child: const Text('Submit Paper'),
+          const SizedBox(width: 10,),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 200,
+                    child: Text("Novelty Score:  ", textScaler:TextScaler.linear(1.2))
+                  ),
+                  SizedBox(
+                    width: 75,
+                    height: 45,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      textAlignVertical: TextAlignVertical.center,
+                      textAlign: TextAlign.center,
+                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      controller: noveltyScore,
+                      decoration: const InputDecoration(
+                        border:OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(fontSize: 20),
+                      
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 200,
+                    child: Text("Accuracy Score:  ", textScaler:TextScaler.linear(1.2))
+                  ),
+                  SizedBox(
+                    width: 75,
+                    height: 45,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      textAlignVertical: TextAlignVertical.center,
+                      textAlign: TextAlign.center,
+                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      controller: accuracyScore,
+                      decoration: const InputDecoration(
+                        border:OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(fontSize: 20),
+                      
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 200,
+                    child: Text("Relevance Score:  ", textScaler:TextScaler.linear(1.2))
+                  ),
+                  SizedBox(
+                    width: 75,
+                    height: 45,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      textAlignVertical: TextAlignVertical.center,
+                      textAlign: TextAlign.center,
+                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      controller: relevanceScore,
+                      decoration: const InputDecoration(
+                        border:OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(fontSize: 20),
+                      
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 200,
+                    child: Text("Ethicality Score:  ", textScaler:TextScaler.linear(1.2))
+                  ),
+                  SizedBox(
+                    width: 75,
+                    height: 45,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      textAlignVertical: TextAlignVertical.center,
+                      textAlign: TextAlign.center,
+                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      controller: ethicalityScore,
+                      decoration: const InputDecoration(
+                        border:OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(fontSize: 20),
+                      
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 200,
+                    child: Text("Understandability Score:  ", textScaler:TextScaler.linear(1.2))
+                  ),
+                  SizedBox(
+                    width: 75,
+                    height: 45,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      textAlignVertical: TextAlignVertical.center,
+                      textAlign: TextAlign.center,
+                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      controller: understandabilityScore,
+                      decoration: const InputDecoration(
+                        border:OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(fontSize: 20),
+                      
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 200,
+                    child: Text("Acknowledgement Score:  ", textScaler:TextScaler.linear(1.2))
+                  ),
+                  SizedBox(
+                    width: 75,
+                    height: 45,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      textAlignVertical: TextAlignVertical.center,
+                      textAlign: TextAlign.center,
+                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      controller: acknowledgementScore,
+                      decoration: const InputDecoration(
+                        border:OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(fontSize: 20),
+                      
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 200,
+                    child: Text("Citations Score:  ", textScaler:TextScaler.linear(1.2))
+                  ),
+                  SizedBox(
+                    width: 75,
+                    height: 45,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      textAlignVertical: TextAlignVertical.center,
+                      textAlign: TextAlign.center,
+                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      controller: citationsScore,
+                      decoration: const InputDecoration(
+                        border:OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(fontSize: 20),
+                      
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => _reviewPaper(context),
+                child: const Text('Submit Review'),
+              ),
+            ],
           ),
         ],
       ),
