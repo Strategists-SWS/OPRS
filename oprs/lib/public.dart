@@ -26,7 +26,7 @@ class SubmitPage extends StatelessWidget {
 
             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
               return const Center(
-                child: Text('No papers uploaded yet.'),
+                child: Text('No papers submitted yet.'),
               );
             }
 
