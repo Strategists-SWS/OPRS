@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ReviewForm extends StatelessWidget {
   final String url;
   ReviewForm({required this.url});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,12 +21,13 @@ class ReviewPage extends StatefulWidget {
   final String url;
   const ReviewPage({required this.url});
   @override
-  ReviewFormPage createState() => ReviewFormPage(this.url);
+  _ReviewFormPageState createState() => _ReviewFormPageState(url);
 }
 
-class ReviewFormPage extends State<ReviewPage> {
+class _ReviewFormPageState extends State<ReviewPage> {
   final String url;
-  ReviewFormPage(this.url);
+  _ReviewFormPageState(this.url);
+
   TextEditingController noveltyScore = TextEditingController();
   TextEditingController accuracyScore = TextEditingController();
   TextEditingController relevanceScore = TextEditingController();
@@ -36,6 +37,7 @@ class ReviewFormPage extends State<ReviewPage> {
   TextEditingController citationsScore = TextEditingController();
 
   void _reviewPaper(BuildContext pcontext) async {
+    // Validation and score parsing logic
     if (noveltyScore.text.isEmpty ||
         accuracyScore.text.isEmpty ||
         relevanceScore.text.isEmpty ||
@@ -98,8 +100,6 @@ class ReviewFormPage extends State<ReviewPage> {
       );
       return;
     } else {
-      DateTime submissionDate = DateTime.now();
-
       User? user = FirebaseAuth.instance.currentUser;
       if (user == null) {
         throw Exception("User not logged in");
@@ -154,83 +154,83 @@ class ReviewFormPage extends State<ReviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Review Papers'),
-        ),
-        body: Column(
-          children: [
-            SizedBox(
-              width: 100.0,
-              child: TextFormField(
-                keyboardType: TextInputType.number,
-                controller: noveltyScore,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(), labelText: 'Novelty'),
-              ),
+      appBar: AppBar(
+        title: const Text('Review Papers'),
+      ),
+      body: Column(
+        children: [
+          SizedBox(
+            width: 100.0,
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              controller: noveltyScore,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(), labelText: 'Novelty'),
             ),
-            SizedBox(
-              width: 100.0,
-              child: TextFormField(
-                keyboardType: TextInputType.number,
-                controller: accuracyScore,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(), labelText: 'Accuracy'),
-              ),
+          ),
+          SizedBox(
+            width: 100.0,
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              controller: accuracyScore,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(), labelText: 'Accuracy'),
             ),
-            SizedBox(
-              width: 100.0,
-              child: TextFormField(
-                keyboardType: TextInputType.number,
-                controller: relevanceScore,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(), labelText: 'Relevance'),
-              ),
+          ),
+          SizedBox(
+            width: 100.0,
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              controller: relevanceScore,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(), labelText: 'Relevance'),
             ),
-            SizedBox(
-              width: 100.0,
-              child: TextFormField(
-                keyboardType: TextInputType.number,
-                controller: ethicalityScore,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(), labelText: 'Ethicality'),
-              ),
+          ),
+          SizedBox(
+            width: 100.0,
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              controller: ethicalityScore,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(), labelText: 'Ethicality'),
             ),
-            SizedBox(
-              width: 100.0,
-              child: TextFormField(
-                keyboardType: TextInputType.number,
-                controller: understandabilityScore,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Understandability'),
-              ),
+          ),
+          SizedBox(
+            width: 100.0,
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              controller: understandabilityScore,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Understandability'),
             ),
-            SizedBox(
-              width: 100.0,
-              child: TextFormField(
-                keyboardType: TextInputType.number,
-                controller: acknowledgementScore,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Acknowledgement of Limitations'),
-              ),
+          ),
+          SizedBox(
+            width: 100.0,
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              controller: acknowledgementScore,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Acknowledgement of Limitations'),
             ),
-            SizedBox(
-              width: 100.0,
-              child: TextFormField(
-                keyboardType: TextInputType.number,
-                controller: citationsScore,
-                decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Appropriate Citations'),
-              ),
+          ),
+          SizedBox(
+            width: 100.0,
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              controller: citationsScore,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Appropriate Citations'),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _reviewPaper(context),
-              child: const Text('Submit Paper'),
-            ),
-          ],
-        ));
+          ),
+          ElevatedButton(
+            onPressed: () => _reviewPaper(context),
+            child: const Text('Submit Paper'),
+          ),
+        ],
+      ),
+    );
   }
 }
