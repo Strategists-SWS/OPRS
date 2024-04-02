@@ -93,7 +93,7 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
         UploadTask uploadTask = storageReference.putData(_pickedFile!.bytes!);
         TaskSnapshot taskSnapshot = await uploadTask;
         String pdfUrl = await taskSnapshot.ref.getDownloadURL();
-
+        String adminId = 'iSksdEGbE8QLLLLLYKg9TP0cYrO2';
         // Store paper details in Firestore
         await FirebaseFirestore.instance.collection('papers').add({
           'userId': user.uid,
@@ -101,6 +101,7 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
           'relatedTopics': topics,
           'url': pdfUrl,
           'submissionDate': submissionDate,
+          'assignedTo': adminId,
         });
         // Show success message and return to the Review widget
         showDialog(

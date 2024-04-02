@@ -20,7 +20,7 @@ class Abc extends StatelessWidget {
           String userId = snapshot.data!.uid;
           return AssignedPapersPage(userId: userId);
         } else {
-          return  MyLoginPage(); // Navigate to your sign in screen if the user is not logged in
+          return MyLoginPage(); // Navigate to your sign in screen if the user is not logged in
         }
       },
     );
@@ -40,7 +40,7 @@ class AssignedPapersPage extends StatelessWidget {
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('reviews')
+            .collection('papers')
             .where('assignedTo', isEqualTo: userId)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -76,9 +76,10 @@ class AssignedPapersPage extends StatelessWidget {
                     ? () async {
                         String pdfUrl = document['url'];
                         if (document['isReviewed'] == true) {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                                'This paper has already been reviewed.'),
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content:
+                                Text('This paper has already been reviewed.'),
                           ));
                           return;
                         } else {
@@ -92,7 +93,8 @@ class AssignedPapersPage extends StatelessWidget {
                         if (await canLaunchUrl(Uri.parse(pdfUrl))) {
                           await launchUrl(Uri.parse(pdfUrl));
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
                             content: Text('Could not open PDF.'),
                           ));
                         }

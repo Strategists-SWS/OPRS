@@ -117,7 +117,8 @@ class _ReviewFormPageState extends State<ReviewPage> {
               ethicalityS +
               understandabilityS +
               acknowledgementS +
-              citationsS) / 7;
+              citationsS) /
+          7;
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection(
@@ -165,16 +166,18 @@ class _ReviewFormPageState extends State<ReviewPage> {
       ),
       body: Row(
         children: [
-          const SizedBox(width: 10,),
+          const SizedBox(
+            width: 10,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   const SizedBox(
-                    width: 200,
-                    child: Text("Novelty Score:  ", textScaler:TextScaler.linear(1.2))
-                  ),
+                      width: 200,
+                      child: Text("Novelty Score:  ",
+                          textScaler: TextScaler.linear(1.2))),
                   SizedBox(
                     width: 75,
                     height: 45,
@@ -182,13 +185,14 @@ class _ReviewFormPageState extends State<ReviewPage> {
                       keyboardType: TextInputType.number,
                       textAlignVertical: TextAlignVertical.center,
                       textAlign: TextAlign.center,
-                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       controller: noveltyScore,
                       decoration: const InputDecoration(
-                        border:OutlineInputBorder(),
+                        border: OutlineInputBorder(),
                       ),
                       style: const TextStyle(fontSize: 20),
-                      
                     ),
                   ),
                 ],
@@ -197,9 +201,9 @@ class _ReviewFormPageState extends State<ReviewPage> {
               Row(
                 children: [
                   const SizedBox(
-                    width: 200,
-                    child: Text("Accuracy Score:  ", textScaler:TextScaler.linear(1.2))
-                  ),
+                      width: 200,
+                      child: Text("Accuracy Score:  ",
+                          textScaler: TextScaler.linear(1.2))),
                   SizedBox(
                     width: 75,
                     height: 45,
@@ -207,13 +211,14 @@ class _ReviewFormPageState extends State<ReviewPage> {
                       keyboardType: TextInputType.number,
                       textAlignVertical: TextAlignVertical.center,
                       textAlign: TextAlign.center,
-                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       controller: accuracyScore,
                       decoration: const InputDecoration(
-                        border:OutlineInputBorder(),
+                        border: OutlineInputBorder(),
                       ),
                       style: const TextStyle(fontSize: 20),
-                      
                     ),
                   ),
                 ],
@@ -222,9 +227,9 @@ class _ReviewFormPageState extends State<ReviewPage> {
               Row(
                 children: [
                   const SizedBox(
-                    width: 200,
-                    child: Text("Relevance Score:  ", textScaler:TextScaler.linear(1.2))
-                  ),
+                      width: 200,
+                      child: Text("Relevance Score:  ",
+                          textScaler: TextScaler.linear(1.2))),
                   SizedBox(
                     width: 75,
                     height: 45,
@@ -232,13 +237,14 @@ class _ReviewFormPageState extends State<ReviewPage> {
                       keyboardType: TextInputType.number,
                       textAlignVertical: TextAlignVertical.center,
                       textAlign: TextAlign.center,
-                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       controller: relevanceScore,
                       decoration: const InputDecoration(
-                        border:OutlineInputBorder(),
+                        border: OutlineInputBorder(),
                       ),
                       style: const TextStyle(fontSize: 20),
-                      
                     ),
                   ),
                 ],
@@ -247,9 +253,9 @@ class _ReviewFormPageState extends State<ReviewPage> {
               Row(
                 children: [
                   const SizedBox(
-                    width: 200,
-                    child: Text("Ethicality Score:  ", textScaler:TextScaler.linear(1.2))
-                  ),
+                      width: 200,
+                      child: Text("Ethicality Score:  ",
+                          textScaler: TextScaler.linear(1.2))),
                   SizedBox(
                     width: 75,
                     height: 45,
@@ -257,13 +263,14 @@ class _ReviewFormPageState extends State<ReviewPage> {
                       keyboardType: TextInputType.number,
                       textAlignVertical: TextAlignVertical.center,
                       textAlign: TextAlign.center,
-                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       controller: ethicalityScore,
                       decoration: const InputDecoration(
-                        border:OutlineInputBorder(),
+                        border: OutlineInputBorder(),
                       ),
                       style: const TextStyle(fontSize: 20),
-                      
                     ),
                   ),
                 ],
@@ -272,9 +279,9 @@ class _ReviewFormPageState extends State<ReviewPage> {
               Row(
                 children: [
                   const SizedBox(
-                    width: 200,
-                    child: Text("Understandability Score:  ", textScaler:TextScaler.linear(1.2))
-                  ),
+                      width: 200,
+                      child: Text("Understandability Score:  ",
+                          textScaler: TextScaler.linear(1.2))),
                   SizedBox(
                     width: 75,
                     height: 45,
@@ -282,13 +289,14 @@ class _ReviewFormPageState extends State<ReviewPage> {
                       keyboardType: TextInputType.number,
                       textAlignVertical: TextAlignVertical.center,
                       textAlign: TextAlign.center,
-                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       controller: understandabilityScore,
                       decoration: const InputDecoration(
-                        border:OutlineInputBorder(),
+                        border: OutlineInputBorder(),
                       ),
                       style: const TextStyle(fontSize: 20),
-                      
                     ),
                   ),
                 ],
@@ -297,9 +305,9 @@ class _ReviewFormPageState extends State<ReviewPage> {
               Row(
                 children: [
                   const SizedBox(
-                    width: 200,
-                    child: Text("Acknowledgement Score:  ", textScaler:TextScaler.linear(1.2))
-                  ),
+                      width: 200,
+                      child: Text("Acknowledgement Score:  ",
+                          textScaler: TextScaler.linear(1.2))),
                   SizedBox(
                     width: 75,
                     height: 45,
@@ -307,13 +315,14 @@ class _ReviewFormPageState extends State<ReviewPage> {
                       keyboardType: TextInputType.number,
                       textAlignVertical: TextAlignVertical.center,
                       textAlign: TextAlign.center,
-                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       controller: acknowledgementScore,
                       decoration: const InputDecoration(
-                        border:OutlineInputBorder(),
+                        border: OutlineInputBorder(),
                       ),
                       style: const TextStyle(fontSize: 20),
-                      
                     ),
                   ),
                 ],
@@ -322,9 +331,9 @@ class _ReviewFormPageState extends State<ReviewPage> {
               Row(
                 children: [
                   const SizedBox(
-                    width: 200,
-                    child: Text("Citations Score:  ", textScaler:TextScaler.linear(1.2))
-                  ),
+                      width: 200,
+                      child: Text("Citations Score:  ",
+                          textScaler: TextScaler.linear(1.2))),
                   SizedBox(
                     width: 75,
                     height: 45,
@@ -332,13 +341,14 @@ class _ReviewFormPageState extends State<ReviewPage> {
                       keyboardType: TextInputType.number,
                       textAlignVertical: TextAlignVertical.center,
                       textAlign: TextAlign.center,
-                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       controller: citationsScore,
                       decoration: const InputDecoration(
-                        border:OutlineInputBorder(),
+                        border: OutlineInputBorder(),
                       ),
                       style: const TextStyle(fontSize: 20),
-                      
                     ),
                   ),
                 ],
