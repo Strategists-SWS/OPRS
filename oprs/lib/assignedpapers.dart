@@ -76,10 +76,9 @@ class AssignedPapersPage extends StatelessWidget {
                     ? () async {
                         String pdfUrl = document['url'];
                         if (document['isReviewed'] == true) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content:
-                                Text('This paper has already been reviewed.'),
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                                'This paper has already been reviewed.'),
                           ));
                           return;
                         } else {
@@ -93,8 +92,7 @@ class AssignedPapersPage extends StatelessWidget {
                         if (await canLaunchUrl(Uri.parse(pdfUrl))) {
                           await launchUrl(Uri.parse(pdfUrl));
                         } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text('Could not open PDF.'),
                           ));
                         }
