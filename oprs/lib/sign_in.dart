@@ -3,6 +3,15 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:oprs/homepage.dart';
 import 'package:oprs/public.dart';
+import 'package:oprs/adminhome.dart';
+
+bool isAdmin(String email) {
+  if (email == 'admin@gmail.com') {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 class MyLoginPage extends StatelessWidget {
   const MyLoginPage({super.key});
@@ -37,9 +46,15 @@ class MyLoginPage extends StatelessWidget {
       onLogin: tryLogin,
       onSignup: trySignUp,
       onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => const MyHomePage(),
-        ));
+        if (isAdmin(FirebaseAuth.instance.currentUser!.email!)) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => const AdminPage(),
+          ));
+        } else {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => const MyHomePage(),
+          ));
+        }
       },
       onRecoverPassword: (_) async {
         return null;
