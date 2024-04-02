@@ -51,8 +51,8 @@ class ReviewPage extends StatelessWidget {
                   if (await canLaunchUrl(Uri.parse(pdfUrl))) {
                     await launchUrl(Uri.parse(pdfUrl));
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text('Could not open PDF.'),
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Could not open PDF.'),
                     ));
                   }
                 },

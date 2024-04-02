@@ -42,7 +42,6 @@ class _UpdateState extends State<Update> {
                 debugPrint(options.toString());
               },
               options: const <ValueItem>[
-<<<<<<< HEAD
                 ValueItem(label: 'Algorithms', value: '1'),
                 ValueItem(label: 'Artificial Intelligence and Machine Learning', value: '2'),
                 ValueItem(label: 'Bioinformatics and Computational Biology', value: '3'),
@@ -56,20 +55,6 @@ class _UpdateState extends State<Update> {
                 ValueItem(label: 'OQuantum Computing and Quantum Information Science', value: '11'),
                 ValueItem(label: 'Robotics and Autonomous Systems', value: '12'),
                 ValueItem(label: 'Software Engineering', value: '12'),
-=======
-                ValueItem(label: 'Option 1', value: '1'),
-                ValueItem(label: 'Option 2', value: '2'),
-                ValueItem(label: 'Option 3', value: '3'),
-                ValueItem(label: 'Option 4', value: '4'),
-                ValueItem(label: 'Option 5', value: '5'),
-                ValueItem(label: 'Option 6', value: '6'),
-                ValueItem(label: 'Option 7', value: '7'),
-                ValueItem(label: 'Option 8', value: '8'),
-                ValueItem(label: 'Option 9', value: '9'),
-                ValueItem(label: 'Option 10', value: '10'),
-                ValueItem(label: 'Option 11', value: '11'),
-                ValueItem(label: 'Option 12', value: '12'),
->>>>>>> origin/master
               ],
               maxItems: 200,
               disabledOptions: const [ValueItem(label: 'Option 1', value: '1')],
