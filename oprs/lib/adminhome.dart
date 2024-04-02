@@ -17,7 +17,6 @@ class _AdminPageState extends State<AdminPage> {
     const Abc(),
     const ReviewPage(),
   ];
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -25,6 +24,18 @@ class _AdminPageState extends State<AdminPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Online Peer Review System'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () {
+                // Perform logout actions here
+                // For now, let's just navigate to the login page
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => const MyLoginPage(),
+                ));
+              },
+            ),
+          ],
           shadowColor: Colors.blue,
           bottom: const TabBar(
             tabs: [
