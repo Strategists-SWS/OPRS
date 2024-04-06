@@ -27,6 +27,7 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
   PlatformFile? _pickedFile; // Initialized to null
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _topicsController = TextEditingController();
+  bool _isUploading = false;
 
   void _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -83,6 +84,9 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
       );
     } else {
       if (_pickedFile != null) {
+        setState(() {
+          _isUploading = true;
+        });
         User? user = FirebaseAuth.instance.currentUser;
         if (user == null) {
           throw Exception("User not logged in");
@@ -115,6 +119,9 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
                   onPressed: () {
                     Navigator.pop(context); // Close the dialog
                     Navigator.pop(pcontext);
+                    setState(() {
+                      _isUploading = false;
+                    });
                   },
                   child: const Text("Close"),
                 ),
@@ -168,7 +175,9 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () => _submitPaper(context),
+            onPressed: () {
+              if (!_isUploading) _submitPaper(context);
+            },
             child: const Text('Submit Paper'),
           ),
           const SizedBox(height: 20),
