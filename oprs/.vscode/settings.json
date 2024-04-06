@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "/home/slum-dog/Desktop/OPRS/oprs/linux"
+    "cmake.sourceDirectory": "/home/slum-dog/Desktop/OPRS/oprs/linux",
+    "cmake.configureOnOpen": true
 }
