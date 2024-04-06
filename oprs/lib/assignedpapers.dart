@@ -37,16 +37,6 @@ class AssignedPapersPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Assigned Papers'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              // Perform logout actions here
-              // For now, let's just navigate to the login page
-              Navigator.pushReplacementNamed(context, '/login');
-            },
-          ),
-        ],
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
