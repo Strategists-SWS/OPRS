@@ -1,5 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:multi_dropdown/models/value_item.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,18 +15,14 @@ class Update extends StatefulWidget {
 
 class _UpdateState extends State<Update> {
   String _name = '';
-  List<String> _selectedTopics = [];
 
-  void _updateProfile(String name, List<String> topics) async {
-    // Save the profile to Firestore
-    //create a user collection in firestore and save the user details including name and topics
-    //check if the user id is not null then assign the user id to the uid variable
+  MultiSelectController selectedTopics=MultiSelectController();
+
+  void _updateProfile(String name) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    //check if user is already stored in users or not and if not then add the user to the users collection
-    //else update the user details
     await FirebaseFirestore.instance.collection('users').doc(uid).set({
       'name': name,
-      'topics': topics,
+      'topics': selectedTopics,
     }, SetOptions(merge: true));
     //output updated profile details using snackbar
 
@@ -116,6 +114,7 @@ class _UpdateState extends State<Update> {
               searchEnabled: true,
               optionTextStyle: const TextStyle(fontSize: 16),
               selectedOptionIcon: const Icon(Icons.check_circle),
+              controller: selectedTopics,
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -123,7 +122,7 @@ class _UpdateState extends State<Update> {
                 // Save profile or perform necessary actions
                 //create a user collection in firestore and save the user details including name and topics
                 //check if none of the fields are empty
-                if (_name.isEmpty || _selectedTopics.isEmpty) {
+                if (_name.isEmpty || selectedTopics.selectedOptions.isEmpty) {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -144,7 +143,7 @@ class _UpdateState extends State<Update> {
                   );
                   return;
                 }
-                _updateProfile(_name, _selectedTopics);
+                _updateProfile(_name);
               },
               child: const Text('Save'),
             ),
