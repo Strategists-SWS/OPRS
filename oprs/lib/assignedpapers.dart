@@ -41,7 +41,7 @@ class AssignedPapersPage extends StatelessWidget {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('papers')
-            .where('assignedTo', isEqualTo: userId)
+            .where("assignedTo", arrayContains: userId)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
