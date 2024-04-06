@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 class SubmitPage extends StatelessWidget {
   final String userId;
 
-  SubmitPage({required this.userId});
+  const SubmitPage({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +44,8 @@ class SubmitPage extends StatelessWidget {
                     if (await canLaunchUrl(Uri.parse(pdfUrl))) {
                       await launchUrl(Uri.parse(pdfUrl));
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: const Text('Could not open PDF.'),
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Could not open PDF.'),
                       ));
                     }
                   },

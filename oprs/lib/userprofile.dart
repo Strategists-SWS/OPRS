@@ -1,155 +1,145 @@
-// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:multi_dropdown/models/value_item.dart';
-import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Update extends StatefulWidget {
-  const Update({super.key});
-
+class UserProfilePage extends StatefulWidget {
   @override
-  _UpdateState createState() => _UpdateState();
+  _UserProfilePageState createState() => _UserProfilePageState();
 }
 
-class _UpdateState extends State<Update> {
-  String _name = '';
+class _UserProfilePageState extends State<UserProfilePage> {
+  final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  TextEditingController _nameController = TextEditingController();
+  List<String> _selectedTopics = [];
+  final List<String> _allTopics = [
+	'Algorithms',
+	'Artificial Intelligence and Machine Learning',
+	'Bioinformatics and Computational Biology',
+	'Blockchain Technology and Cryptocurrencies',
+	'Cloud Computing and Distributed Systems',
+	'Computer Vision and Image Processing',
+	'Cybersecurity and Network Security',
+	'Data Science and Big Data Analytics',
+	'Internet of Things (IoT) and Edge Computing',
+	'Natural Language Processing and Text Mining',
+	'Quantum Computing and Quantum Information Science',
+	'Robotics and Autonomous Systems',
+	'Software Engineering and Programming Languages'
+  ];
 
-  MultiSelectController selectedTopics=MultiSelectController();
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
 
-  void _updateProfile(String name) async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    await FirebaseFirestore.instance.collection('users').doc(uid).set({
-      'name': name,
-      'topics': selectedTopics,
-    }, SetOptions(merge: true));
-    //output updated profile details using snackbar
+  Future<void> _fetchUserData() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentSnapshot userData =
+          await _firestore.collection('users').doc(user.uid).get();
+      if (userData.exists) {
+        setState(() {
+          _nameController.text = userData['name'];
+          _selectedTopics = List<String>.from(userData['topics']);
+        });
+      }
+    }
+  }
 
+Future<void> _updateProfile() async {
+  User? user = _auth.currentUser;
+  if (user != null) {
+    await _firestore.collection('users').doc(user.uid).set({
+      'name': _nameController.text,
+      'topics': _selectedTopics,
+    });
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Success"),
-          content: const Text("The paper has been submitted successfully."),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the dialog
-              },
-              child: const Text("Close"),
-            ),
-          ],
-        );
+	return AlertDialog(
+	  title: Text('Success'),
+	  content: Text('Profile updated successfully.'),
+	  actions: <Widget>[
+	    TextButton(
+	      onPressed: () {
+	        Navigator.of(context).pop();
+	      },
+	      child: Text('OK'),
+	    ),
+	  ],
+	);
       },
     );
   }
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Update Profile'),
+        title: Text('User Profile'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              decoration: const InputDecoration(labelText: 'Name'),
-              onChanged: (value) {
-                setState(() {
-                  _name = value;
-                });
-              },
-            ),
-            const SizedBox(height: 20),
-            const Text('Select Proficiency Topics:'),
-            const SizedBox(height: 10),
-            MultiSelectDropDown(
-              // showClearIcon: true,
-              //controller: _controller,
-              onOptionSelected: (options) {
-                debugPrint(options.toString());
-              },
-              options: const <ValueItem>[
-                ValueItem(label: 'Algorithms', value: '1'),
-                ValueItem(
-                    label: 'Artificial Intelligence and Machine Learning',
-                    value: '2'),
-                ValueItem(
-                    label: 'Bioinformatics and Computational Biology',
-                    value: '3'),
-                ValueItem(
-                    label: 'Blockchain Technology and Cryptocurrencies',
-                    value: '4'),
-                ValueItem(
-                    label: 'Cloud Computing and Distributed Systems',
-                    value: '5'),
-                ValueItem(
-                    label: 'Computer Vision and Image Processing', value: '6'),
-                ValueItem(
-                    label: 'Cybersecurity and Network Security', value: '7'),
-                ValueItem(
-                    label: 'Data Science and Big Data Analytics', value: '8'),
-                ValueItem(
-                    label: 'Internet of Things (IoT) and Edge Computing',
-                    value: '9'),
-                ValueItem(
-                    label: 'Natural Language Processing and Text Mining',
-                    value: '10'),
-                ValueItem(
-                    label: 'OQuantum Computing and Quantum Information Science',
-                    value: '11'),
-                ValueItem(
-                    label: 'Robotics and Autonomous Systems', value: '12'),
-                ValueItem(label: 'Software Engineering', value: '12'),
-              ],
-              maxItems: 200,
-              disabledOptions: const [ValueItem(label: 'Option 1', value: '1')],
-              selectionType: SelectionType.multi,
-              chipConfig: const ChipConfig(wrapType: WrapType.wrap),
-              dropdownHeight: 300,
-              searchEnabled: true,
-              optionTextStyle: const TextStyle(fontSize: 16),
-              selectedOptionIcon: const Icon(Icons.check_circle),
-              controller: selectedTopics,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Save profile or perform necessary actions
-                //create a user collection in firestore and save the user details including name and topics
-                //check if none of the fields are empty
-                if (_name.isEmpty || selectedTopics.selectedOptions.isEmpty) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("Error"),
-                        content: const Text(
-                            "Please fill in all the fields before submitting."),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context); // Close the dialog
-                            },
-                            child: const Text("Close"),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                  return;
-                }
-                _updateProfile(_name);
-              },
-              child: const Text('Save'),
-            ),
-          ],
+        padding: EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(labelText: 'Name'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 20),
+              Text('Select Topics'),
+              Expanded(
+                child: ListView(
+                  children: _allTopics.map((topic) {
+                    return CheckboxListTile(
+                      title: Text(topic),
+                      value: _selectedTopics.contains(topic),
+                      onChanged: (bool? value) {
+                        setState(() {
+                          if (value!) {
+                            _selectedTopics.add(topic);
+                          } else {
+                            _selectedTopics.remove(topic);
+                          }
+                        });
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    _updateProfile();
+                  }
+                },
+                child: Text('Update Profile'),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+void main() {
+  runApp(MaterialApp(
+    home: UserProfilePage(),
+  ));
+}
+

@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 class ReviewForm extends StatelessWidget {
   final String url;
-  ReviewForm({required this.url});
+  const ReviewForm({super.key, required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,7 @@ class ReviewForm extends StatelessWidget {
 
 class ReviewPage extends StatefulWidget {
   final String url;
-  const ReviewPage({required this.url});
+  const ReviewPage({super.key, required this.url});
   @override
   _ReviewFormPageState createState() => _ReviewFormPageState(url);
 }

@@ -43,13 +43,13 @@ class ResearchPaperList extends StatelessWidget {
 class UserListPage extends StatelessWidget {
   final Map<String, dynamic> paperData;
 
-  UserListPage({required this.paperData});
+  const UserListPage({super.key, required this.paperData});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Users with Similar Topics'),
+        title: const Text('Users with Similar Topics'),
       ),
       body: SimilarUsersList(paperData: paperData),
     );
@@ -59,7 +59,7 @@ class UserListPage extends StatelessWidget {
 class SimilarUsersList extends StatelessWidget {
   final Map<String, dynamic> paperData;
 
-  SimilarUsersList({required this.paperData});
+  const SimilarUsersList({super.key, required this.paperData});
 
   @override
   Widget build(BuildContext context) {
@@ -70,13 +70,13 @@ class SimilarUsersList extends StatelessWidget {
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // Loading indicator while data is being fetched
+          return const CircularProgressIndicator(); // Loading indicator while data is being fetched
         }
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         }
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return Text('No users with similar topics found.');
+          return const Text('No users with similar topics found.');
         }
         return ListView(
           children: snapshot.data!.docs.map((doc) {
@@ -104,13 +104,13 @@ class AssignPaperPage extends StatelessWidget {
   final Map<String, dynamic> userData;
   final Map<String, dynamic> paperData;
 
-  AssignPaperPage({required this.userData, required this.paperData});
+  const AssignPaperPage({super.key, required this.userData, required this.paperData});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Assign Paper'),
+        title: const Text('Assign Paper'),
       ),
       body: Center(
         child: ElevatedButton(

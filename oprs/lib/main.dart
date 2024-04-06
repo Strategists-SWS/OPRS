@@ -23,43 +23,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-  @override
-  // ignore: library_private_types_in_public_api
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  //int _currentIndex = 0;
-
-  final List<Widget> _tabs = [
-    MyLoginPage(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: _tabs.length,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Online Peer Review System'),
-          shadowColor: Colors.blue,
-          bottom: const TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.person), text: 'Login/Signup'),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: _tabs,
-        ),
-      ),
+      home: const MyLoginPage(),
     );
   }
 }

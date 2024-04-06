@@ -18,7 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const AuthenticationWrapper(),
     const Abc(),
     const ReviewPage(),
-    const Update(),
+    UserProfilePage(),
   ];
 
   @override
