@@ -88,8 +88,7 @@ class PaperListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime assignmentDate =
-        (document['submissionDate'] as Timestamp).toDate();
+    DateTime assignmentDate = (document['time'][userId] as Timestamp).toDate();
     DateTime currentTime = DateTime.now();
     Duration elapsedTime = currentTime.difference(assignmentDate);
     bool canGrade = elapsedTime.inDays < 14;

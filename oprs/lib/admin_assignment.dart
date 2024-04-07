@@ -156,6 +156,20 @@ class AssignPaperPage extends StatelessWidget {
                 });
               }
             }
+            if (reviewRef.docs.isEmpty) {
+              // If the document doesn't exist, create a new one
+              await FirebaseFirestore.instance.collection('reviews').add({
+                'paperId': paperData['paperId'],
+                'time': {userData['userId']: DateTime.now()},
+              });
+            } else {
+              // If the document exists, update it to append the userId to the grade array
+              for (QueryDocumentSnapshot documentSnapshot in reviewRef.docs) {
+                await documentSnapshot.reference.update({
+                  'time.${userData['userId']}': DateTime.now(),
+                });
+              }
+            }
             for (QueryDocumentSnapshot documentSnapshot in paperRef.docs) {
               await documentSnapshot.reference.update({
                 'assignedTo': FieldValue.arrayUnion([userData['userId']]),
