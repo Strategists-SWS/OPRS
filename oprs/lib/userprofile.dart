@@ -61,14 +61,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Success'),
-            content: Text('Profile updated successfully.'),
+            title: const Text('Success'),
+            content: const Text('Profile updated successfully.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -92,7 +92,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Name'),
+                decoration: const InputDecoration(labelText: 'Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your name';
@@ -100,8 +100,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
-              Text('Select Topics'),
+              const SizedBox(height: 20),
+              const Text('Select Topics'),
               Expanded(
                 child: ListView(
                   children: _allTopics.map((topic) {
@@ -121,14 +121,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   }).toList(),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _updateProfile();
                   }
                 },
-                child: Text('Update Profile'),
+                child: const Text('Update Profile'),
               ),
             ],
           ),
