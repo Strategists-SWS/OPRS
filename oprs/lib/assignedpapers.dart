@@ -88,26 +88,100 @@ class PaperListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime assignmentDate = (document['time'][userId] as Timestamp).toDate();
-    DateTime currentTime = DateTime.now();
-    Duration elapsedTime = currentTime.difference(assignmentDate);
-    bool canGrade = elapsedTime.inDays < 14;
+    return FutureBuilder<DocumentSnapshot>(
+      future: FirebaseFirestore.instance
+          .collection('reviews')
+          .where('paperId', isEqualTo: document['paperId'])
+          .get()
+          .then((querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          return querySnapshot.docs.first;
+        } else {
+          throw Exception('Assignment not found');
+        }
+      }),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || !snapshot.data!.exists) {
+          return const Text('Assignment not found');
+        }
 
-    return ListTile(
-      title: Text(document['title']),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TimeLeftWidget(
-              elapsedTime: elapsedTime), // Use separate widget for time left
-          if (canGrade) const Text('You can grade this paper.'),
-        ],
-      ),
-      onTap: canGrade
-          ? () async {
-              // your onTap logic
-            }
-          : null,
+        DateTime assignmentDate =
+            (snapshot.data!['time'][userId] as Timestamp).toDate();
+        DateTime currentTime = DateTime.now();
+        Duration elapsedTime = currentTime.difference(assignmentDate);
+        bool canGrade = elapsedTime.inDays < 14;
+
+        return ListTile(
+          title: Text(document['title']),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TimeLeftWidget(
+                  elapsedTime:
+                      elapsedTime), // Use separate widget for time left
+              if (canGrade) const Text('You can grade this paper.'),
+            ],
+          ),
+          onTap: () async {
+            String pdfUrl = document['url'];
+
+            // Close current SnackBar if open
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Title: ${document['title']}"),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (await canLaunch(pdfUrl)) {
+                            await launch(pdfUrl);
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text('Could not open PDF.'),
+                            ));
+                          }
+                        },
+                        child: const Text('Download Paper'),
+                      ),
+                      if (canGrade)
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ReviewForm(
+                                url: pdfUrl,
+                              ),
+                            ));
+                          },
+                          child: const Text('Grade Paper'),
+                        ),
+                      ElevatedButton(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        },
+                        child: const Text('Close'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ));
+          },
+        );
+      },
     );
   }
 }
@@ -115,7 +189,7 @@ class PaperListItem extends StatelessWidget {
 class TimeLeftWidget extends StatefulWidget {
   final Duration elapsedTime;
 
-  const TimeLeftWidget({Key? key, required this.elapsedTime}) : super(key: key);
+  const TimeLeftWidget({super.key, required this.elapsedTime});
 
   @override
   _TimeLeftWidgetState createState() => _TimeLeftWidgetState();
