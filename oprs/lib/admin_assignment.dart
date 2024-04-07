@@ -136,6 +136,26 @@ class AssignPaperPage extends StatelessWidget {
                 .collection('papers')
                 .where('paperId', isEqualTo: paperData['paperId'])
                 .get();
+
+            QuerySnapshot reviewRef = await FirebaseFirestore.instance
+                .collection('reviews')
+                .where('paperId', isEqualTo: paperData['paperId'])
+                .get();
+
+            if (reviewRef.docs.isEmpty) {
+              // If the document doesn't exist, create a new one
+              await FirebaseFirestore.instance.collection('reviews').add({
+                'paperId': paperData['paperId'],
+                'grade': {userData['userId']: null},
+              });
+            } else {
+              // If the document exists, update it to append the userId to the grade array
+              for (QueryDocumentSnapshot documentSnapshot in reviewRef.docs) {
+                await documentSnapshot.reference.update({
+                  'grade.${userData['userId']}': null,
+                });
+              }
+            }
             for (QueryDocumentSnapshot documentSnapshot in paperRef.docs) {
               await documentSnapshot.reference.update({
                 'assignedTo': FieldValue.arrayUnion([userData['userId']]),
