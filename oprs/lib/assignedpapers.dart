@@ -162,7 +162,7 @@ class PaperListItem extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ReviewForm(
-                                url: pdfUrl,
+                                paperId: document['paperId'],
                               ),
                             ));
                           },
