@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
 class ReviewForm extends StatelessWidget {
-  final String url;
-  const ReviewForm({super.key, required this.url});
+  final String paperId;
+  const ReviewForm({super.key, required this.paperId});
 
   @override
   Widget build(BuildContext context) {
@@ -13,21 +13,22 @@ class ReviewForm extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Upload Paper'),
       ),
-      body: ReviewPage(url: url),
+      body: ReviewPage(paperId: paperId),
     );
   }
 }
 
 class ReviewPage extends StatefulWidget {
-  final String url;
-  const ReviewPage({super.key, required this.url});
+  final String paperId;
+  const ReviewPage({super.key, required this.paperId});
   @override
-  _ReviewFormPageState createState() => _ReviewFormPageState(url);
+  _ReviewFormPageState createState() => _ReviewFormPageState(paperId);
 }
 
 class _ReviewFormPageState extends State<ReviewPage> {
-  final String url;
-  _ReviewFormPageState(this.url);
+  final String paperId;
+  final String uid = FirebaseAuth.instance.currentUser!.uid;
+  _ReviewFormPageState(this.paperId);
 
   TextEditingController noveltyScore = TextEditingController();
   TextEditingController accuracyScore = TextEditingController();
@@ -118,20 +119,18 @@ class _ReviewFormPageState extends State<ReviewPage> {
               citationsS) /
           7;
 
+      //roundoff netS to 2 decimal places
+      netS = double.parse(netS.toStringAsFixed(2));
+
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection(
               'reviews') // Replace 'your_collection' with the name of your collection in Firestore
-          .where('url', isEqualTo: url)
+          .where('paperId', isEqualTo: paperId)
           .get();
 
-      Map<String, dynamic> newData = {
-        'isReviewed': true,
-        'userId': user.uid,
-        'grade': netS,
-      };
       // Loop through each document with matching URL and update the data
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-        await documentSnapshot.reference.update(newData);
+        await documentSnapshot.reference.update({'grade.${uid}': netS});
       }
 
       // Show success message and return to the Review widget
