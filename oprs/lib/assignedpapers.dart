@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:oprs/sign_in.dart';
 import 'package:oprs/reviewpaperform.dart';
+import 'dart:async';
 
 class Abc extends StatelessWidget {
   const Abc({super.key});
@@ -27,11 +28,16 @@ class Abc extends StatelessWidget {
   }
 }
 
-class AssignedPapersPage extends StatelessWidget {
+class AssignedPapersPage extends StatefulWidget {
   final String userId;
 
-  const AssignedPapersPage({super.key, required this.userId});
+  const AssignedPapersPage({Key? key, required this.userId}) : super(key: key);
 
+  @override
+  _AssignedPapersPageState createState() => _AssignedPapersPageState();
+}
+
+class _AssignedPapersPageState extends State<AssignedPapersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +47,7 @@ class AssignedPapersPage extends StatelessWidget {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('papers')
-            .where("assignedTo", arrayContains: userId)
+            .where("assignedTo", arrayContains: widget.userId)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -54,55 +60,122 @@ class AssignedPapersPage extends StatelessWidget {
             );
           }
 
-          return ListView(
-            children: snapshot.data!.docs.map((document) {
-              DateTime assignmentDate =
-                  (document['submissionDate'] as Timestamp).toDate();
-              Duration timeDifference =
-                  DateTime.now().difference(assignmentDate);
-              String timeSinceAssignment = '${timeDifference.inDays} days ago';
-              bool canGrade = timeDifference.inDays < 14;
-
-              return ListTile(
-                title: Text(document['title']),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(timeSinceAssignment),
-                    if (canGrade) const Text('You can grade this paper.'),
-                  ],
-                ),
-                onTap: canGrade
-                    ? () async {
-                        String pdfUrl = document['url'];
-                        if (document['isReviewed'] == true) {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                                'This paper has already been reviewed.'),
-                          ));
-                          return;
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ReviewForm(url: pdfUrl),
-                            ),
-                          );
-                        }
-                        if (await canLaunchUrl(Uri.parse(pdfUrl))) {
-                          await launchUrl(Uri.parse(pdfUrl));
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text('Could not open PDF.'),
-                          ));
-                        }
-                      }
-                    : null,
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              final document = snapshot.data!.docs[index];
+              return PaperListItem(
+                document: document,
+                userId: widget.userId,
               );
-            }).toList(),
+            },
           );
         },
       ),
     );
+  }
+}
+
+class PaperListItem extends StatelessWidget {
+  final QueryDocumentSnapshot<Object?> document;
+  final String userId;
+
+  const PaperListItem({
+    Key? key,
+    required this.document,
+    required this.userId,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime assignmentDate =
+        (document['submissionDate'] as Timestamp).toDate();
+    DateTime currentTime = DateTime.now();
+    Duration elapsedTime = currentTime.difference(assignmentDate);
+    bool canGrade = elapsedTime.inDays < 14;
+
+    return ListTile(
+      title: Text(document['title']),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TimeLeftWidget(
+              elapsedTime: elapsedTime), // Use separate widget for time left
+          if (canGrade) const Text('You can grade this paper.'),
+        ],
+      ),
+      onTap: canGrade
+          ? () async {
+              // your onTap logic
+            }
+          : null,
+    );
+  }
+}
+
+class TimeLeftWidget extends StatefulWidget {
+  final Duration elapsedTime;
+
+  const TimeLeftWidget({Key? key, required this.elapsedTime}) : super(key: key);
+
+  @override
+  _TimeLeftWidgetState createState() => _TimeLeftWidgetState();
+}
+
+class _TimeLeftWidgetState extends State<TimeLeftWidget> {
+  late Timer _timer;
+  late String _timeLeftString;
+
+  @override
+  void initState() {
+    super.initState();
+    _timeLeftString = _getTimeLeft(widget.elapsedTime);
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        _timeLeftString =
+            _getTimeLeft(widget.elapsedTime + Duration(seconds: timer.tick));
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _timeLeftString,
+      style: TextStyle(fontSize: 16), // Customize style as needed
+    );
+  }
+
+  String _getTimeLeft(Duration difference) {
+    // Calculate total time left in seconds
+    int totalTimeLeftInSeconds = 14 * 24 * 60 * 60;
+
+    // Calculate elapsed time in seconds
+    int elapsedTimeInSeconds = difference.inSeconds;
+
+    // Calculate remaining time
+    int remainingTimeInSeconds = totalTimeLeftInSeconds - elapsedTimeInSeconds;
+
+    // Ensure remaining time is not negative
+    if (remainingTimeInSeconds <= 0) {
+      return 'Time Left: 0 days 0 hours 0 minutes 0 seconds';
+    }
+
+    // Convert remaining time to days, hours, minutes, and seconds
+    int daysLeft = remainingTimeInSeconds ~/ (24 * 60 * 60);
+    remainingTimeInSeconds %= (24 * 60 * 60);
+    int hoursLeft = remainingTimeInSeconds ~/ (60 * 60);
+    remainingTimeInSeconds %= (60 * 60);
+    int minutesLeft = remainingTimeInSeconds ~/ 60;
+    remainingTimeInSeconds %= 60;
+
+    // Return formatted time left string
+    return 'Time Left: $daysLeft days $hoursLeft hours $minutesLeft minutes $remainingTimeInSeconds seconds';
   }
 }
