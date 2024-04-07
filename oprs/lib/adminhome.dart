@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oprs/reviewer.dart';
 import 'package:oprs/sign_in.dart';
-import 'package:oprs/assignedpapers.dart';
+import 'package:oprs/admin_assignment.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -14,7 +14,7 @@ class _AdminPageState extends State<AdminPage> {
   //int _currentIndex = 0;
 
   final List<Widget> _tabs = [
-    const Abc(),
+    const ResearchPaperList(),
     const ReviewPage(),
   ];
   @override

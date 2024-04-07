@@ -6,8 +6,7 @@ class ResearchPaperList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream:
-          FirebaseFirestore.instance.collection('papers').snapshots(),
+      stream: FirebaseFirestore.instance.collection('papers').snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator(); // Loading indicator while data is being fetched
@@ -51,15 +50,22 @@ class UserListPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Users with Similar Topics'),
       ),
-      body: SimilarUsersList(paperData: paperData),
+      body: SimilarUsersList(
+        paperData: paperData,
+        currentUserUid: paperData['userId'],
+      ),
     );
   }
 }
 
 class SimilarUsersList extends StatelessWidget {
   final Map<String, dynamic> paperData;
+  final String
+      currentUserUid; // Add this variable to hold the UID of the user who posted the paper
 
-  const SimilarUsersList({super.key, required this.paperData});
+  const SimilarUsersList(
+      {Key? key, required this.paperData, required this.currentUserUid})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,18 +87,24 @@ class SimilarUsersList extends StatelessWidget {
         return ListView(
           children: snapshot.data!.docs.map((doc) {
             Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
-            return ListTile(
-              title: Text(userData['name']),
-              onTap: () {
-                // Navigate to AssignPaperPage passing userData and paperData
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AssignPaperPage(
-                          userData: userData, paperData: paperData)),
-                );
-              },
-            );
+            // Check if the user's UID is not the same as the currentUserUid
+            if (userData['userId'] != currentUserUid) {
+              return ListTile(
+                title: Text(userData['name']),
+                onTap: () {
+                  // Navigate to AssignPaperPage passing userData and paperData
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AssignPaperPage(
+                            userData: userData, paperData: paperData)),
+                  );
+                },
+              );
+            } else {
+              // Return an empty Container for the user who posted the paper
+              return Container();
+            }
           }).toList(),
         );
       },
@@ -104,7 +116,8 @@ class AssignPaperPage extends StatelessWidget {
   final Map<String, dynamic> userData;
   final Map<String, dynamic> paperData;
 
-  const AssignPaperPage({super.key, required this.userData, required this.paperData});
+  const AssignPaperPage(
+      {super.key, required this.userData, required this.paperData});
 
   @override
   Widget build(BuildContext context) {
@@ -114,10 +127,25 @@ class AssignPaperPage extends StatelessWidget {
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             // Perform assignment logic here
             // For example, update the Firestore document for the paper with assigned user details
             // Then navigate back to the previous screen
+            // Get the reference to the Firestore document for the paper
+            QuerySnapshot paperRef = await FirebaseFirestore.instance
+                .collection('papers')
+                .where('paperId', isEqualTo: paperData['paperId'])
+                .get();
+            for (QueryDocumentSnapshot documentSnapshot in paperRef.docs) {
+              await documentSnapshot.reference.update({
+                'assignedTo': FieldValue.arrayUnion([userData['userId']]),
+              });
+            }
+
+            //create a document in the reviews collection with fields isReviewed = false, grade = null, paperId = paperData['paperId']
+
+            // Navigate back to the previous screen
+            Navigator.pop(context);
           },
           child: Text('Assign to ${userData['name']}'),
         ),

@@ -26,8 +26,23 @@ class UploadPaperForm extends StatefulWidget {
 class _UploadPaperFormState extends State<UploadPaperForm> {
   PlatformFile? _pickedFile; // Initialized to null
   final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _topicsController = TextEditingController();
   bool _isUploading = false;
+  List<String> _selectedTopics = [];
+  final List<String> _allTopics = [
+    'Algorithms',
+    'Artificial Intelligence and Machine Learning',
+    'Bioinformatics and Computational Biology',
+    'Blockchain Technology and Cryptocurrencies',
+    'Cloud Computing and Distributed Systems',
+    'Computer Vision and Image Processing',
+    'Cybersecurity and Network Security',
+    'Data Science and Big Data Analytics',
+    'Internet of Things (IoT) and Edge Computing',
+    'Natural Language Processing and Text Mining',
+    'Quantum Computing and Quantum Information Science',
+    'Robotics and Autonomous Systems',
+    'Software Engineering and Programming Languages'
+  ];
 
   void _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -44,7 +59,6 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
 
   void _submitPaper(BuildContext pcontext) async {
     String title = _titleController.text;
-    String topics = _topicsController.text;
     DateTime submissionDate = DateTime.now();
     if (title.isEmpty) {
       showDialog(
@@ -64,7 +78,7 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
           );
         },
       );
-    } else if (topics.isEmpty) {
+    } else if (_selectedTopics.isEmpty) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -97,15 +111,18 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
         UploadTask uploadTask = storageReference.putData(_pickedFile!.bytes!);
         TaskSnapshot taskSnapshot = await uploadTask;
         String pdfUrl = await taskSnapshot.ref.getDownloadURL();
-        String adminId = 'iSksdEGbE8QLLLLLYKg9TP0cYrO2';
+        List<String> adminId = ['iSksdEGbE8QLLLLLYKg9TP0cYrO2'];
+        String paperId =
+            FirebaseFirestore.instance.collection('papers').doc().id;
         // Store paper details in Firestore
         await FirebaseFirestore.instance.collection('papers').add({
           'userId': user.uid,
           'title': title,
-          'relatedTopics': topics,
+          'relatedTopics': _selectedTopics,
           'url': pdfUrl,
           'submissionDate': submissionDate,
           'assignedTo': adminId,
+          'paperId': paperId,
         });
         // Show success message and return to the Review widget
         showDialog(
@@ -164,9 +181,24 @@ class _UploadPaperFormState extends State<UploadPaperForm> {
             decoration: const InputDecoration(labelText: 'Title'),
           ),
           const SizedBox(height: 20),
-          TextField(
-            controller: _topicsController,
-            decoration: const InputDecoration(labelText: 'Related Topics'),
+          Expanded(
+            child: ListView(
+              children: _allTopics.map((topic) {
+                return CheckboxListTile(
+                  title: Text(topic),
+                  value: _selectedTopics.contains(topic),
+                  onChanged: (bool? value) {
+                    setState(() {
+                      if (value!) {
+                        _selectedTopics.add(topic);
+                      } else {
+                        _selectedTopics.remove(topic);
+                      }
+                    });
+                  },
+                );
+              }).toList(),
+            ),
           ),
           const SizedBox(height: 20),
           ElevatedButton(

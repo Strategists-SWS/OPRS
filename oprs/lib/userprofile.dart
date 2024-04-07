@@ -14,19 +14,19 @@ class _UserProfilePageState extends State<UserProfilePage> {
   TextEditingController _nameController = TextEditingController();
   List<String> _selectedTopics = [];
   final List<String> _allTopics = [
-	'Algorithms',
-	'Artificial Intelligence and Machine Learning',
-	'Bioinformatics and Computational Biology',
-	'Blockchain Technology and Cryptocurrencies',
-	'Cloud Computing and Distributed Systems',
-	'Computer Vision and Image Processing',
-	'Cybersecurity and Network Security',
-	'Data Science and Big Data Analytics',
-	'Internet of Things (IoT) and Edge Computing',
-	'Natural Language Processing and Text Mining',
-	'Quantum Computing and Quantum Information Science',
-	'Robotics and Autonomous Systems',
-	'Software Engineering and Programming Languages'
+    'Algorithms',
+    'Artificial Intelligence and Machine Learning',
+    'Bioinformatics and Computational Biology',
+    'Blockchain Technology and Cryptocurrencies',
+    'Cloud Computing and Distributed Systems',
+    'Computer Vision and Image Processing',
+    'Cybersecurity and Network Security',
+    'Data Science and Big Data Analytics',
+    'Internet of Things (IoT) and Edge Computing',
+    'Natural Language Processing and Text Mining',
+    'Quantum Computing and Quantum Information Science',
+    'Robotics and Autonomous Systems',
+    'Software Engineering and Programming Languages'
   ];
 
   @override
@@ -49,32 +49,33 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
   }
 
-Future<void> _updateProfile() async {
-  User? user = _auth.currentUser;
-  if (user != null) {
-    await _firestore.collection('users').doc(user.uid).set({
-      'name': _nameController.text,
-      'topics': _selectedTopics,
-    });
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-	return AlertDialog(
-	  title: Text('Success'),
-	  content: Text('Profile updated successfully.'),
-	  actions: <Widget>[
-	    TextButton(
-	      onPressed: () {
-	        Navigator.of(context).pop();
-	      },
-	      child: Text('OK'),
-	    ),
-	  ],
-	);
-      },
-    );
+  Future<void> _updateProfile() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('users').doc(user.uid).set({
+        'name': _nameController.text,
+        'topics': _selectedTopics,
+        'userId': user.uid,
+      });
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Success'),
+            content: Text('Profile updated successfully.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -142,4 +143,3 @@ void main() {
     home: UserProfilePage(),
   ));
 }
-
