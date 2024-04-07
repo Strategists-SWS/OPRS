@@ -14,7 +14,7 @@ bool isAdmin(String email) {
 }
 
 class MyLoginPage extends StatelessWidget {
-  const MyLoginPage({super.key});
+  const MyLoginPage({Key? key});
 
   Future<String?> tryLogin(LoginData data) async {
     try {
@@ -41,30 +41,51 @@ class MyLoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlutterLogin(
-      title: 'OPRS',
-      onLogin: tryLogin,
-      onSignup: trySignUp,
-      onSubmitAnimationCompleted: () {
-        if (isAdmin(FirebaseAuth.instance.currentUser!.email!)) {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => const AdminPage(),
-          ));
-        } else {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => const MyHomePage(),
-          ));
-        }
-      },
-      onRecoverPassword: (_) async {
-        return null;
+    return Builder(
+      builder: (context) {
+        return MaterialApp(
+          home: FlutterLogin(
+            logo: 'assets/logo.png',
+            onLogin: tryLogin,
+            onSignup: trySignUp,
+            onSubmitAnimationCompleted: () {
+              if (isAdmin(FirebaseAuth.instance.currentUser!.email!)) {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => const AdminPage(),
+                ));
+              } else {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => const MyHomePage(),
+                ));
+              }
+            },
+            onRecoverPassword: (_) async {
+              return null;
+            },
+            theme: LoginTheme(
+              primaryColor: Color.fromARGB(
+                  255, 69, 67, 67), // Keep the primary color black
+              buttonTheme: LoginButtonTheme(
+                splashColor:
+                    Color.fromARGB(255, 108, 101, 245), // Keep the splash color
+                backgroundColor: Colors.deepPurple[
+                    400], // Set the background color of the button to purple
+              ),
+              textFieldStyle: TextStyle(
+                color: Color.fromARGB(
+                    255, 132, 77, 233), // Keep the text field color
+              ),
+            ),
+          ),
+          debugShowCheckedModeBanner: false,
+        );
       },
     );
   }
 }
 
 class AuthenticationWrapper extends StatelessWidget {
-  const AuthenticationWrapper({super.key});
+  const AuthenticationWrapper({Key? key});
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
