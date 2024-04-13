@@ -40,7 +40,7 @@ class PaperScoreWidget extends StatelessWidget {
         });
 
         if (count == 0) {
-          return Text('Not graded yet');
+          return const Text('Not graded yet');
         }
 
         var averageScore = totalScore / count;

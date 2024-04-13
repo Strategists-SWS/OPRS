@@ -18,8 +18,7 @@ class Abc extends StatelessWidget {
         }
 
         if (snapshot.hasData) {
-          String userId = snapshot.data!.uid;
-          return AssignedPapersPage(userId: userId);
+          return const AssignedPapersPage();
         } else {
           return const MyLoginPage(); // Navigate to your sign in screen if the user is not logged in
         }
@@ -29,15 +28,14 @@ class Abc extends StatelessWidget {
 }
 
 class AssignedPapersPage extends StatefulWidget {
-  final String userId;
-
-  const AssignedPapersPage({Key? key, required this.userId}) : super(key: key);
+  const AssignedPapersPage({super.key});
 
   @override
   _AssignedPapersPageState createState() => _AssignedPapersPageState();
 }
 
 class _AssignedPapersPageState extends State<AssignedPapersPage> {
+  String userid = FirebaseAuth.instance.currentUser!.uid;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,9 +45,9 @@ class _AssignedPapersPageState extends State<AssignedPapersPage> {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('papers')
-            .where("assignedTo", arrayContains: widget.userId)
+            .where("assignedTo", arrayContains: userid)
             .snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -66,7 +64,7 @@ class _AssignedPapersPageState extends State<AssignedPapersPage> {
               final document = snapshot.data!.docs[index];
               return PaperListItem(
                 document: document,
-                userId: widget.userId,
+                userId: userid,
               );
             },
           );
@@ -80,11 +78,7 @@ class PaperListItem extends StatelessWidget {
   final QueryDocumentSnapshot<Object?> document;
   final String userId;
 
-  const PaperListItem({
-    Key? key,
-    required this.document,
-    required this.userId,
-  }) : super(key: key);
+  const PaperListItem({super.key,required this.document, required this.userId});
 
   @override
   Widget build(BuildContext context) {

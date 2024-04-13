@@ -64,8 +64,7 @@ class SimilarUsersList extends StatelessWidget {
       currentUserUid; // Add this variable to hold the UID of the user who posted the paper
 
   const SimilarUsersList(
-      {Key? key, required this.paperData, required this.currentUserUid})
-      : super(key: key);
+      {super.key, required this.paperData, required this.currentUserUid});
 
   @override
   Widget build(BuildContext context) {
@@ -141,32 +140,19 @@ class AssignPaperPage extends StatelessWidget {
                 .collection('reviews')
                 .where('paperId', isEqualTo: paperData['paperId'])
                 .get();
-
             if (reviewRef.docs.isEmpty) {
               // If the document doesn't exist, create a new one
               await FirebaseFirestore.instance.collection('reviews').add({
                 'paperId': paperData['paperId'],
+                'time': {userData['userId']: DateTime.now()},
                 'grade': {userData['userId']: null},
               });
             } else {
               // If the document exists, update it to append the userId to the grade array
               for (QueryDocumentSnapshot documentSnapshot in reviewRef.docs) {
                 await documentSnapshot.reference.update({
-                  'grade.${userData['userId']}': null,
-                });
-              }
-            }
-            if (reviewRef.docs.isEmpty) {
-              // If the document doesn't exist, create a new one
-              await FirebaseFirestore.instance.collection('reviews').add({
-                'paperId': paperData['paperId'],
-                'time': {userData['userId']: DateTime.now()},
-              });
-            } else {
-              // If the document exists, update it to append the userId to the grade array
-              for (QueryDocumentSnapshot documentSnapshot in reviewRef.docs) {
-                await documentSnapshot.reference.update({
                   'time.${userData['userId']}': DateTime.now(),
+                  'grade.${userData['userId']}': null,
                 });
               }
             }
